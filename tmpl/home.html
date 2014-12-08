@@ -1,0 +1,15 @@
+{{define "home"}}
+{{template "header" .}}
+    <div class="container">
+      <div class="message"></div>
+      <div class="inner">
+        <div class="welcome">
+        <br>
+        Welcome to {{.Config.Main.AppName}}.<br>
+        <a href="/upload/" class="large">Click HERE to upload</a><br>
+        This site is managed by {{.Config.Main.Company}}
+        </div>
+      </dif>
+    </div>
+{{template "footer" .}}
+{{end}}

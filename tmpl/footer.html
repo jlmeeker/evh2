@@ -1,0 +1,18 @@
+{{define "footer"}}
+	  <div class="footer">
+	  	{{range .Config.Main.Disclaimer}}
+	  	{{.}}<br>
+	  	{{end}}
+	  	<a href="{{.Config.Main.CompanyURL}}" target="_blank">&copy; {{.Config.Main.Company}} {{.Year}}</a>
+	  </div>
+	  {{if .Config.Main.Logo}}
+	  <div class="logo"><a href="{{.Config.Main.CompanyURL}}" target="_blank"><img src="{{.Config.Main.Logo}}" /></a></div>
+	  {{end}}
+  </body>
+</html>
+{{end}}
+
+{{define "emailfooter"}}
+  </body>
+</html>
+{{end}}

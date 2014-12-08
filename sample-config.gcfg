@@ -1,0 +1,97 @@
+# Sample EVH configuration file
+#   WARNING: if you don't want a value set, comment it out, don't leave it empty
+#
+
+[main]
+; Company name (used in email and web content)
+company=My Company Name
+
+; Company URL
+companyurl=http://www.mycompany.com
+
+; Company Logo URL
+logo=http://www.mycompany.com/logo.png
+
+; Application name (used in email and web content)
+appname=Event Horizon
+
+; Application description
+appdesc=A single-use file transfer system
+
+; Application disclaimer (multiple instances end up one per line on site footer)
+disclaimer=This site is for official <company name> file transfers only.
+disclaimer=All file transfers are logged.
+
+; File expirations (multiple okay): m=minute, h=hour, d=day, w=week
+expiration=1:m
+expiration=1:h
+expiration=1:d
+expiration=1:w
+
+; Download and verification code length (MIN)
+codelenmin=20
+
+; Download and verification code length (MAX)
+codelenmax=30
+
+
+[daemon]
+; Frequency to purge expired uploads (minutes)
+purgefreq=1
+
+; Frequency to refresh HTML templates (minutes)
+tmplfreq=1
+
+; Dir not to check when purging (multiple okay)
+nopurgecheck=tmp
+nopurgecheck=temp
+
+
+[server]
+; Maximum amount of uploads to store in memory before going to disk (megabytes)
+maxmem=4000
+
+; Address we use for download URLs
+address=127.0.0.1:8080
+
+; Address we listen on
+listenaddr=127.0.0.1:8080
+
+; Mail Server for outgoing email in the format of hostname:port
+mailserver=mail.somewhere.com:25
+
+; Asset directory (where uploads are stored)
+assets=./assets
+
+; Location of html templates
+templates=tmpl
+
+; Enable SSL or not
+ssl=false
+
+; SSL certificate and key (both required for SSL)
+;cert=mycert.pem
+;key=mykey.pem
+
+
+[client]
+; Server URL for uploading files
+url=http://127.0.0.1:8080/upload/
+
+; Form field of file selector (EVH doesn't care what this is).
+field=myfiles
+
+; Source email address
+email=
+
+; Destination email address(es), comma delimited
+destemail=
+
+; Description of uploaded files
+description=Test upload
+
+; Show progress bar
+progress=true
+
+; Expiration (valid suffixes are: m=minute, h=hour, d=day, w=week)
+expiration=1:d

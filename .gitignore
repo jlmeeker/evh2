@@ -1,0 +1,8 @@
+assets/
+bin/
+pkg/
+src/code.google.com
+src/github.com
+local-config.gcfg
+local.cert
+local.key
