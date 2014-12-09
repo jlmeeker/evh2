@@ -37,7 +37,7 @@ codelenmax=30
 
 [daemon]
 ; Frequency to purge expired uploads (minutes)
-purgefreq=1
+purgefreq=60
 
 ; Frequency to refresh HTML templates (minutes)
 tmplfreq=1
@@ -48,9 +48,6 @@ nopurgecheck=temp
 
 
 [server]
-; Maximum amount of uploads to store in memory before going to disk (megabytes)
-maxmem=4000
-
 ; Address we use for download URLs
 address=127.0.0.1
 

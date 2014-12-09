@@ -34,13 +34,13 @@ type Configuration struct {
 	}
 	Server struct {
 		Address    string
+		AdminKey string
 		Assets     string
 		CertFile   string `gcfg:"cert"`
 		KeyFile    string `gcfg:"key"`
 		ListenAddr string
 		MailUser   string
 		MailPass   string
-		MaxMem     int64
 		Mailserver string
 		NonSslPort string
 		Ssl        bool
