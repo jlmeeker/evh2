@@ -23,6 +23,11 @@ import (
 	"time"
 )
 
+type Expiration struct {
+	Key   string
+	Value string
+}
+
 // Parse our expirations and create a usable map
 func ExpandExpirations() map[string]time.Time {
 	var expirations = make(map[string]time.Time)
@@ -68,8 +73,9 @@ func ExpandExpirations() map[string]time.Time {
 }
 
 // Expirations are guarantee to have both parts present in key
-func ExpirationsToHtmlMap(expirations map[string]time.Time) map[string]string {
-	var result = make(map[string]string)
+func ExpirationsToHtmlMap(expirations map[string]time.Time) map[int]Expiration {
+	var result = make(map[int]Expiration)
+	var counter = 0
 
 	for key, _ := range expirations {
 		var parts = strings.Split(key, ":")
@@ -100,7 +106,8 @@ func ExpirationsToHtmlMap(expirations map[string]time.Time) map[string]string {
 			dispVal = dispVal + "s"
 		}
 
-		result[key] = dispVal
+		result[counter] = Expiration{Key: key, Value: dispVal}
+		counter++
 	}
 
 	return result

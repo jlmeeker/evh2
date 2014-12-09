@@ -18,7 +18,7 @@ type Page struct {
 	BaseUrl         string
 	Config          Configuration
 	DownloadUrlPath string
-	Expirations     map[string]string
+	Expirations     map[int]Expiration
 	HttpProto       string
 	Message         template.HTML
 	Total           float64
