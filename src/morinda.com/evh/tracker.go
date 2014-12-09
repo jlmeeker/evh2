@@ -17,6 +17,7 @@ import (
 var TrackerFileName = "info.json"
 
 type Tracker struct {
+	BaseDir        string
 	CliUpload      bool
 	Description    string
 	Dnldcode       string
@@ -35,6 +36,7 @@ type Tracker struct {
 
 // Generate new tracker
 func NewTracker(dnldcode string) (tracker Tracker) {
+	tracker.BaseDir = filepath.Join(Config.Server.Assets, dnldcode)
 	tracker.Dnldcode = dnldcode
 	tracker.Log = make(map[string]string)
 	tracker.Vercode, _ = GenCode(false, 0)
@@ -72,8 +74,8 @@ func LoadTrackerFromFile(fpath string) (tracker Tracker, trackererr error) {
 }
 
 // Write tracker to file
-func (t *Tracker) Save(basedir string) error {
-	var fpath = filepath.Join(basedir, TrackerFileName)
+func (t *Tracker) Save() error {
+	var fpath = filepath.Join(t.BaseDir, TrackerFileName)
 
 	filedata, err := json.MarshalIndent(t, "", "\t")
 	if err != nil {

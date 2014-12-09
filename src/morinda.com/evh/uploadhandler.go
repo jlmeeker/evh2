@@ -19,7 +19,18 @@ import (
 
 //This is where the action happens.
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
+	// Redirect to SSL if enabled
+	if r.TLS == nil && Config.Server.Ssl {
+		redirectToSsl(w, r)
+		return
+	}
+
+	// Get a new Page object
 	var page = NewPage()
+	// Set the appropriate protocol prefix for URLs
+	if r.TLS != nil {
+		page.HttpProto = "https"
+	}
 
 	// Prep our available expirations
 	var expirations = ExpandExpirations()
@@ -49,7 +60,6 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		req.Log("New incoming transfer starting for", r.RemoteAddr)
 
 		// Parse the multipart form in the request (set max memory in bytes)
-		//var maxmembytes = Config.Server.MaxMem * 1000 * 1000 / 2
 		err := r.ParseMultipartForm(10000)
 		if err != nil {
 			page.Message = "Transfer aborted (client disconnected)"
@@ -76,20 +86,16 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 					var filename = ScrubFilename(files[i].Header.Get("Content-Disposition"))
 					filecount++
 
-					// Attempt to save the file
-					var newfile = File{
-						Name:    filename,
-						DirPath: req.Path,
-					}
+					// Create a File object
+					var newfile = NewFile(filename, req.Path)
 
 					// Move the temp file to the permament location
-					err := newfile.Save(req, files[i])
+					err := newfile.Save(files[i])
 					if err != nil {
 						req.Errors = append(req.Errors, err.Error())
 						req.Log()
 					} else {
 						req.Log(fmt.Sprintf("Saved file (%s, %.2f MB): %s", newfile.Name, newfile.Size/1024/1024, newfile.Path))
-						newfile.GenURL(req.Dnldcode)
 					}
 
 					// Update our tracker
@@ -111,15 +117,16 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 			// Send notification
 			req.Notify(&page)
-			page.Tracker.Save(req.Path)
+			page.Tracker.Save()
 		}
 
 		// DisplayPage result message (using template.HTML() allows the template to show the non-garbled URL)
+		var filespageurl = page.BaseUrl + "/download/" + page.Tracker.Dnldcode + "?vercode=" + page.Tracker.Vercode
 		if r.FormValue("client") == "1" {
-			page.Message = template.HTML(fmt.Sprintf("Successfully uploaded %d of %d files.  Your files are available here:\n%s\n", page.Tracker.CountSaved(), filecount, req.DownloadURL+page.Tracker.Vercode))
+			page.Message = template.HTML(fmt.Sprintf("Successfully uploaded %d of %d files.  Your files are available here:\n%s\n", page.Tracker.CountSaved(), filecount, filespageurl))
 			DisplayPage(w, r, "uploadPlain", page)
 		} else {
-			page.Message = template.HTML(fmt.Sprintf("Successfully uploaded %d of %d files.  Your files are available <a href=\"%s\">here</a>.", page.Tracker.CountSaved(), filecount, req.DownloadURL+page.Tracker.Vercode))
+			page.Message = template.HTML(fmt.Sprintf("Successfully uploaded %d of %d files.  Your files are available <a href=\"%s\">here</a>.", page.Tracker.CountSaved(), filecount, filespageurl))
 			DisplayPage(w, r, "upload", page)
 		}
 	default:

@@ -4,7 +4,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"io"
 	"mime/multipart"
 	"os"
@@ -14,21 +13,27 @@ import (
 
 // File object
 type File struct {
-	Name      string
-	DirPath   string
-	Path      string
-	Size      float64
-	SizeMB    float64
-	Saved     bool
-	Url       template.URL
-	WhenSaved string
+	Base64Name string
+	Name       string
+	DirPath    string
+	Path       string
+	Size       float64
+	SizeMB     float64
+	Saved      bool
+	WhenSaved  string
 }
 
-func (f *File) Save(r EvhRequest, tmpfh *multipart.FileHeader) error {
-	// Generate full file path
-	var fname = Base64Encode(f.Name)
-	f.Path = filepath.Join(f.DirPath, fname)
+func NewFile(fname, dirpath string) File {
+	var b64Name = Base64Encode(fname)
+	return File{
+		Base64Name: b64Name,
+		Name:       fname,
+		DirPath:    dirpath,
+		Path:       filepath.Join(dirpath, b64Name),
+	}
+}
 
+func (f *File) Save(tmpfh *multipart.FileHeader) error {
 	// Create destination file making sure the path is writeable.
 	err := os.MkdirAll(f.DirPath, 0700)
 	if err != nil {
@@ -66,8 +71,4 @@ func (f *File) Save(r EvhRequest, tmpfh *multipart.FileHeader) error {
 	}
 
 	return nil
-}
-
-func (f *File) GenURL(dnldcode string) {
-	f.Url = template.URL(HttpProto + "://" + Config.Server.Address + DownloadUrlPath + dnldcode + "/" + Base64Encode(f.Name))
 }

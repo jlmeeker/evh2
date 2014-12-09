@@ -29,12 +29,12 @@ var SrcEmailFlag string
 var UrlFlag string
 
 // Global Variables
-var Files []string
-var Templates *template.Template
-var SiteDown bool
-var HttpProto = "http"
 var UploadUrlPath = "/upload/"
 var DownloadUrlPath = "/download/"
+var Files []string
+var HttpProto = "http"
+var SiteDown bool
+var Templates *template.Template
 
 // Constants
 const VERSION = "2.0.0"
@@ -55,8 +55,20 @@ func init() {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	// Redirect to SSL if enabled
+	if r.TLS == nil && Config.Server.Ssl {
+		log.Println(r.RequestURI)
+		redirectToSsl(w, r)
+		return
+	}
+
 	var page = NewPage()
 	DisplayPage(w, r, "home", page)
+}
+
+func redirectToSsl(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "https://"+Config.Server.Address+":"+Config.Server.SslPort+r.RequestURI, http.StatusTemporaryRedirect)
+	return
 }
 
 func main() {
@@ -81,6 +93,11 @@ func main() {
 			log.Println("WARNING: cannot send emails, mailserver not set")
 		}
 
+		// Set so all generated URLs use https if enabled
+		if Config.Server.Ssl {
+			HttpProto = "https"
+		}
+
 		// Setup our assets dir (if it don't already exist)
 		err := os.MkdirAll(Config.Server.Assets, 0700)
 		if err != nil {
@@ -98,17 +115,24 @@ func main() {
 
 		// Listen
 		log.Println("Listening...")
-		var listenErr error
-		if Config.Server.Ssl {
-			HttpProto = "https"
-			listenErr = http.ListenAndServeTLS(Config.Server.ListenAddr, Config.Server.CertFile, Config.Server.KeyFile, nil)
-		} else {
-			listenErr = http.ListenAndServe(Config.Server.ListenAddr, nil)
-		}
 
-		// Log listen error
+		// Spawn HTTPS listener in another thread
+		go func() {
+			if Config.Server.Ssl == false || Config.Server.SslPort == "" {
+				return
+			}
+			var addrSsl = Config.Server.ListenAddr + ":" + Config.Server.SslPort
+			listenErrSsl := http.ListenAndServeTLS(addrSsl, Config.Server.CertFile, Config.Server.KeyFile, nil)
+			if listenErrSsl != nil {
+				log.Fatal(listenErrSsl.Error())
+			}
+		}()
+
+		// Start non-SSL listener
+		var addrNonSsl = Config.Server.ListenAddr + ":" + Config.Server.NonSslPort
+		listenErr := http.ListenAndServe(addrNonSsl, nil)
 		if listenErr != nil {
-			log.Println(listenErr.Error())
+			log.Fatal(listenErr.Error())
 		}
 	} else {
 		// Final sanity check

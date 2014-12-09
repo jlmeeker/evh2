@@ -13,9 +13,17 @@ import (
 )
 
 func assetHandler(w http.ResponseWriter, r *http.Request) {
+	// Redirect to SSL if enabled
+	if r.TLS == nil && Config.Server.Ssl {
+		redirectToSsl(w, r)
+		return
+	}
+
 	var dnldcode string
-	var page = NewPage()
 	var isfiledownload bool
+
+	// Get a new Page object
+	var page = NewPage()
 
 	// Get our GET request variable(s)
 	var vercode = r.URL.Query().Get("vercode")
@@ -92,7 +100,7 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 		// Log start of transfer
 		req.Log("Sending \"" + realfname + "\" to " + r.RemoteAddr)
 		page.Tracker.AddLog("Download by " + r.RemoteAddr)
-		page.Tracker.Save(ddpath)
+		page.Tracker.Save()
 
 		// Set HTML headers and send file stream
 		w.Header().Set("Content-Disposition", "attachment; filename=\""+realfname+"\"")

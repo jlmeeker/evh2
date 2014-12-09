@@ -15,6 +15,7 @@ import (
 
 type Page struct {
 	AppVer      string
+	BaseUrl     string
 	Config      Configuration
 	Expirations map[string]string
 	HttpProto   string
@@ -25,7 +26,21 @@ type Page struct {
 }
 
 func NewPage() Page {
-	return Page{Config: Config, Year: time.Now().Local().Year(), AppVer: VERSION, HttpProto: HttpProto}
+	// Set the proper protocol and, if necessary, the port too
+	var url = HttpProto + "://" + Config.Server.Address
+	if Config.Server.Ssl && Config.Server.SslPort != "443" {
+		url = url + ":" + Config.Server.SslPort
+	} else if Config.Server.Ssl == false && Config.Server.NonSslPort != "80" {
+		url = url + ":" + Config.Server.NonSslPort
+	}
+
+	return Page{
+		Config:    Config,
+		Year:      time.Now().Local().Year(),
+		AppVer:    VERSION,
+		HttpProto: HttpProto,
+		BaseUrl:   url,
+	}
 }
 
 // Render the template and send it to the client

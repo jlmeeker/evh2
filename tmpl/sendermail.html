@@ -1,17 +1,17 @@
-{{define "senderemail"}}{{$config := .Config}}Subject: File(s) uploaded at {{$config.Main.Company}}
+{{define "senderemail"}}{{$config := .Config}}{{$tracker := .Tracker}}{{$baseurl := .BaseUrl}}Subject: File(s) uploaded at {{$config.Main.Company}}
 MIME-version: 1.0;
 Content-Type: text/html; charset="UTF-8";
 
 
 {{template "emailheader" .}}
-The files you uploaded are ready for download! Click a file name to download the file, or click <a href="{{.HttpProto}}://{{$config.Server.Address}}/download/{{.Tracker.Dnldcode}}?vercode={{.Tracker.Vercode}}">here</a> to see them on the download page.<br><br>
+The files you uploaded are ready for download! Click a file name to download the file, or click <a href="{{.BaseUrl}}/download/{{$tracker.Dnldcode}}?vercode={{$tracker.Vercode}}">here</a> to see them on the download page.<br><br>
 <br>
 <strong>Description:</strong><br>
 {{.Tracker.Description}}<br>
 <br>
 <strong>Files ({{len .Tracker.Files}}):</strong><br>
 {{range .Tracker.Files}}
-Name: <a href="{{.Url}}">{{.Name}}</a>
+Name: <a href="{{$baseurl}}/download/{{$tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a>
 <br>
 &nbsp; &nbsp; Size: {{printf "%.2f" .SizeMB}} MB<br>
 <br>

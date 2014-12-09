@@ -42,7 +42,9 @@ type Configuration struct {
 		MailPass   string
 		MaxMem     int64
 		Mailserver string
+		NonSslPort string
 		Ssl        bool
+		SslPort    string
 		Templates  string
 	}
 	Client struct {

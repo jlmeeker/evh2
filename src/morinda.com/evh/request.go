@@ -74,6 +74,7 @@ func (r *EvhRequest) SendEmail(p *Page, tmplname string) {
 	var body = buffer.Bytes()
 
 	// Send email
+	log.Println(string(body))
 	err = smtp.SendMail(Config.Server.Mailserver, nil, p.Tracker.SrcEmail, toEmails, body)
 	if err != nil {
 		r.Log("ERROR: Could not send email:", err.Error())

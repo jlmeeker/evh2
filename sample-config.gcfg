@@ -52,10 +52,16 @@ nopurgecheck=temp
 maxmem=4000
 
 ; Address we use for download URLs
-address=127.0.0.1:8080
+address=127.0.0.1
 
-; Address we listen on
-listenaddr=127.0.0.1:8080
+; Address we listen on (just the IP)
+listenaddr=127.0.0.1
+
+; Non-SSL port
+nonsslport=8080
+
+; SSL Port
+sslport=8443
 
 ; Mail Server for outgoing email in the format of hostname:port
 mailserver=mail.somewhere.com:25
