@@ -72,9 +72,8 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	req.Dnldcode = dnldcode
 
-	// Prepare directory listing
+	// Send the requested file
 	if isfiledownload {
-		// Send the requested file
 		// Set the full path to the file
 		fullpath := filepath.Join(ddpath, reqpathfile)
 		req.Log(fullpath)
@@ -99,8 +98,6 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Log start of transfer
 		req.Log("Sending \"" + realfname + "\" to " + r.RemoteAddr)
-		page.Tracker.AddLog("Download by " + r.RemoteAddr)
-		page.Tracker.Save()
 
 		// Set HTML headers and send file stream
 		w.Header().Set("Content-Disposition", "attachment; filename=\""+realfname+"\"")
@@ -108,6 +105,9 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 		_, wrerr := io.Copy(w, fh)
 		if wrerr != nil {
 			req.Log("ERROR: " + wrerr.Error())
+		} else {
+			page.Tracker.AddLog(realfname + " downloaded by " + r.RemoteAddr)
+			page.Tracker.Save()
 		}
 
 		// Log end of transfer
