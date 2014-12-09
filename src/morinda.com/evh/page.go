@@ -14,15 +14,17 @@ import (
 )
 
 type Page struct {
-	AppVer      string
-	BaseUrl     string
-	Config      Configuration
-	Expirations map[string]string
-	HttpProto   string
-	Message     template.HTML
-	Total       float64
-	Tracker     Tracker
-	Year        int
+	AppVer          string
+	BaseUrl         string
+	Config          Configuration
+	DownloadUrlPath string
+	Expirations     map[string]string
+	HttpProto       string
+	Message         template.HTML
+	Total           float64
+	Tracker         Tracker
+	UploadUrlPath   string
+	Year            int
 }
 
 func NewPage() Page {
@@ -35,11 +37,13 @@ func NewPage() Page {
 	}
 
 	return Page{
-		Config:    Config,
-		Year:      time.Now().Local().Year(),
-		AppVer:    VERSION,
-		HttpProto: HttpProto,
-		BaseUrl:   url,
+		Config:          Config,
+		Year:            time.Now().Local().Year(),
+		AppVer:          VERSION,
+		HttpProto:       HttpProto,
+		BaseUrl:         url,
+		DownloadUrlPath: DownloadUrlPath,
+		UploadUrlPath:   UploadUrlPath,
 	}
 }
 

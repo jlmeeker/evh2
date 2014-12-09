@@ -4,7 +4,7 @@
       <div class="message">{{.Message}}</div>
       <div class="inner">
         <br>
-          <form id="upload" class="form-signin" method="post" action="/upload/" enctype="multipart/form-data">
+          <form id="upload" class="form-signin" method="post" action="{{.UploadUrlPath}}" enctype="multipart/form-data">
             <table align="center">
               <tr><td class="label">From:</td><td><input type="text" name="SrcEmail"/></td></tr>
               <tr><td class="label">To:</td><td><input type="text" name="DstEmail"/> (comma delimited)</td></tr>
