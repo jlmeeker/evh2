@@ -1,0 +1,8 @@
+# In order to have Apache reverse proxy to your go app, try this in your VirtualHost definition:
+#   This one uses /new/ as a subpath to an existing site.
+#   Be sure to set the following in the config: listenaddr=127.0.0.1; urlprefix=/new; ssl=false; address=<vhost name>/new
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^/new/(.*)$ http://localhost:8080/$1 [P,L]
+    ProxyPassReverse /new/ http://localhost:8080/
