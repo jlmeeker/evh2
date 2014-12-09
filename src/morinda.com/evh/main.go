@@ -1,10 +1,10 @@
-// EVH is designed to be a single-use file transfer system.  Its purpose is to replace 
+// EVH is designed to be a single-use file transfer system.  Its purpose is to replace
 // aging methods of sharing files such as FTP.  With the advent of services like
 // DropBox, Box, Google Drive and the like, this type of service is becoming more
 // commonplace EVH has some differentiating features that make it an especially
 // good tool for corporations and/or home use.
 //
-// EVH runs in two modes: server and client.  Server hosts a web server interface for 
+// EVH runs in two modes: server and client.  Server hosts a web server interface for
 // uploading and downloading files.  The Client is for uploading only and runs
 // in a terminal.  This app is designed to run on all platforms that Go supports.
 package main

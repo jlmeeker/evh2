@@ -1,5 +1,5 @@
 // The tracker is a json file that contains all info about a download
-// session and the files it contains.  
+// session and the files it contains.
 //
 // This data is persistent and stored on disk in an info.json file.
 package main
