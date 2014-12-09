@@ -124,7 +124,7 @@ func main() {
 			var addrSsl = Config.Server.ListenAddr + ":" + Config.Server.SslPort
 			listenErrSsl := http.ListenAndServeTLS(addrSsl, Config.Server.CertFile, Config.Server.KeyFile, nil)
 			if listenErrSsl != nil {
-				log.Fatal(listenErrSsl.Error())
+				log.Fatal("ERROR: ssl listen problem: " + listenErrSsl.Error())
 			}
 		}()
 
@@ -132,7 +132,7 @@ func main() {
 		var addrNonSsl = Config.Server.ListenAddr + ":" + Config.Server.NonSslPort
 		listenErr := http.ListenAndServe(addrNonSsl, nil)
 		if listenErr != nil {
-			log.Fatal(listenErr.Error())
+			log.Fatal("ERROR: non-ssl listen problem: " + listenErr.Error())
 		}
 	} else {
 		// Final sanity check

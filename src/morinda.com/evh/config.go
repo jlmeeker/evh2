@@ -34,7 +34,7 @@ type Configuration struct {
 	}
 	Server struct {
 		Address    string
-		AdminKey string
+		AdminKey   string
 		Assets     string
 		CertFile   string `gcfg:"cert"`
 		KeyFile    string `gcfg:"key"`
@@ -46,6 +46,7 @@ type Configuration struct {
 		Ssl        bool
 		SslPort    string
 		Templates  string
+		UrlPrefix  string
 	}
 	Client struct {
 		Description string

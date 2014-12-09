@@ -32,7 +32,7 @@ func NewPage() Page {
 	var url = HttpProto + "://" + Config.Server.Address
 	if Config.Server.Ssl && Config.Server.SslPort != "443" {
 		url = url + ":" + Config.Server.SslPort
-	} else if Config.Server.Ssl == false && Config.Server.NonSslPort != "80" {
+	} else if Config.Server.Ssl == false && Config.Server.NonSslPort != "80" && Config.Server.UrlPrefix == "" {
 		url = url + ":" + Config.Server.NonSslPort
 	}
 
@@ -43,7 +43,7 @@ func NewPage() Page {
 		HttpProto:       HttpProto,
 		BaseUrl:         url,
 		DownloadUrlPath: DownloadUrlPath,
-		UploadUrlPath:   UploadUrlPath,
+		UploadUrlPath:   Config.Server.UrlPrefix + UploadUrlPath,
 	}
 }
 

@@ -69,7 +69,10 @@ assets=./assets
 ; Location of html templates
 templates=tmpl
 
-; Enable SSL or not
+; URL prefix (in case we're hosted behind a proxy path)
+;urlprefix=/new
+
+; Enable SSL or not (don't use if youre being proxied, see urlprefix above)
 ssl=false
 
 ; SSL certificate and key (both required for SSL)

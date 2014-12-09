@@ -13,6 +13,14 @@ import (
 )
 
 func assetHandler(w http.ResponseWriter, r *http.Request) {
+	// Get initial client address
+	var requestAddr = r.RemoteAddr
+
+	// Get accurate client address
+	if val, ok := r.Header["X-Forwarded-For"]; ok {
+		requestAddr = strings.Join(val, ",")
+	}
+
 	// Redirect to SSL if enabled
 	if r.TLS == nil && Config.Server.Ssl {
 		redirectToSsl(w, r)
@@ -66,9 +74,9 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get a basic EvhRequest object
 	// Keep trying until we success (race warning!!!)
-	req, reqerr := NewRequest(r.RemoteAddr)
+	req, reqerr := NewRequest(requestAddr)
 	for reqerr != nil {
-		req, _ = NewRequest(r.RemoteAddr)
+		req, _ = NewRequest(requestAddr)
 	}
 	req.Dnldcode = dnldcode
 
@@ -97,7 +105,7 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Log start of transfer
-		req.Log("Sending \"" + realfname + "\" to " + r.RemoteAddr)
+		req.Log("Sending \"" + realfname + "\" to " + requestAddr)
 
 		// Set HTML headers and send file stream
 		w.Header().Set("Content-Disposition", "attachment; filename=\""+realfname+"\"")
@@ -106,12 +114,12 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 		if wrerr != nil {
 			req.Log("ERROR: " + wrerr.Error())
 		} else {
-			page.Tracker.AddLog(realfname + " downloaded by " + r.RemoteAddr)
+			page.Tracker.AddLog(realfname + " downloaded by " + requestAddr)
 			page.Tracker.Save()
 		}
 
 		// Log end of transfer
-		req.Log("Sending \"" + realfname + "\" to " + r.RemoteAddr + "... finished.")
+		req.Log("Sending \"" + realfname + "\" to " + requestAddr + "... finished.")
 
 		// Don't send any more data
 		return
@@ -119,7 +127,7 @@ func assetHandler(w http.ResponseWriter, r *http.Request) {
 		// Verify vercode matches, or deny access
 		if vercode != tracker.Vercode || vercode == "" {
 			page.Message = "File(s) not found"
-			req.Log("invalid vercode (" + vercode + " != " + page.Tracker.Vercode + "), access denied for " + r.RemoteAddr)
+			req.Log("invalid vercode (" + vercode + " != " + page.Tracker.Vercode + "), access denied for " + requestAddr)
 			DisplayPage(w, r, "files", page)
 			return
 		}
