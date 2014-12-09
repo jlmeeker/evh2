@@ -5,6 +5,7 @@
 	export GOPATH=`pwd`
 	export GOBIN=$GOPATH/bin
 
+
 # These are required is required
 #
 	# http://godoc.org/code.google.com/p/gcfg
@@ -22,9 +23,15 @@
 #
 	go fmt src/morinda.com/evh/*.go
 
-# Build
+
+# Compiler flags (default flags omit debug information)
+#
+	FLAGS='-ldflags "-w"'
+
+
+# Build (cleanup then build for 64- and 32-bit on the native platform)
 #
 	rm -rf $GOBIN/*
 	rm -rf $GOPATH/pkg/*
-	go install morinda.com/evh
-	GOARCH=386 go install morinda.com/evh
+	go install $FLAGS morinda.com/evh
+	GOARCH=386 go install $FLAGS morinda.com/evh
