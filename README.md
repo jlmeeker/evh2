@@ -1,12 +1,14 @@
 evh2
 ====
 
-Event Horizon (evh) a single-use file transfer system. Version 2.
+Event Horizon (evh) a single-use file transfer system. This is version 2.
+
+** The version 1 was written in PHP and be found here: (https://code.google.com/p/eventh/).  It has been officially discontinued and will receive no updates (not that it really did anyway).
 
 EVH is designed to be a single-use file transfer system.  Its purpose is to replace aging methods of sharing files such as FTP.  With the advent of services like DropBox, Box, Google Drive and the like, this type of service is becoming more commonplace EVH has some differentiating features that make it an especially good tool for corporations and/or home use.  These features include:
 
 * Easy to run on your own server (and port)
-* Just a single binary and a tmpl directory to get started
+* Just a single binary and a tmpl directory to get started (no language/library dependencies!!!)
 * VERY low memory usage (~10-20mb)
 * File transfers are never loaded into memory, always streamed directly to/from disk
 * All uploads have an expiration.  As long as the server is running, cleanup happens automatically.
@@ -32,8 +34,8 @@ Executing:
 evh -server -c <path to config>
 
 # Client (could use -c <configfile> instead of options)
-evh -client [options] <file1... file2...>
-evh -client -c <config file> <file1... file2...>
+evh -client [options] <file1 file2 ...>
+evh -client -c <config file> <file1 file2 ...>
 ```
 
 Other options:
