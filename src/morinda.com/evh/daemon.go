@@ -21,7 +21,7 @@ func RefreshTemplates() {
 	for {
 		Templates, err = template.ParseGlob(tmplGlob)
 		if err != nil {
-			log.Println("Error parsing HTML templates!!! Site is down.")
+			log.Println("Error parsing HTML templates!!! Site is down: " + err.Error())
 			SiteDown = true
 		} else {
 			SiteDown = false
