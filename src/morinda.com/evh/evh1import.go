@@ -33,8 +33,6 @@ func SpitSlurp() {
 		return
 	}
 
-	//log.Println("Db successfully connected")
-
 	// Prepare statement for inserting data
 	rows, err := db.Query("SELECT id, sessionid, name from Files where 1 order by id")
 	if err != nil {
