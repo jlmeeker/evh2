@@ -35,6 +35,7 @@ type Configuration struct {
 	Server struct {
 		Address    string
 		AdminKey   string
+		AllowAdmin bool
 		Assets     string
 		CertFile   string `gcfg:"cert"`
 		KeyFile    string `gcfg:"key"`

@@ -14,17 +14,18 @@ import (
 )
 
 type Page struct {
-	AppVer          string
-	BaseUrl         string
-	Config          Configuration
-	DownloadUrlPath string
-	Expirations     map[int]Expiration
-	HttpProto       string
-	Message         template.HTML
-	Total           float64
-	Tracker         Tracker
-	UploadUrlPath   string
-	Year            int
+	AppVer            string
+	BaseUrl           string
+	Config            Configuration
+	DownloadUrlPath   string
+	Expirations       map[int]Expiration
+	HttpProto         string
+	Message           template.HTML
+	Total             float64
+	Tracker           Tracker
+	UploadUrlPath     string
+	Year              int
+	TrackerOfTrackers TrackerOfTrackers
 }
 
 func NewPage() Page {

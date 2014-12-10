@@ -57,13 +57,29 @@ func init() {
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	// Redirect to SSL if enabled
 	if r.TLS == nil && Config.Server.Ssl {
-		log.Println(r.RequestURI)
 		redirectToSsl(w, r)
 		return
 	}
 
 	var page = NewPage()
 	DisplayPage(w, r, "home", page)
+}
+
+func adminHandler(w http.ResponseWriter, r *http.Request) {
+	// Redirect to SSL if enabled
+	if r.TLS == nil && Config.Server.Ssl {
+		redirectToSsl(w, r)
+		return
+	}
+
+	var page = NewPage()
+	if Config.Server.AllowAdmin {
+		page.TrackerOfTrackers = NewTrackerOfTrackers()
+	} else {
+		page.Message = "Access denied."
+	}
+
+	DisplayPage(w, r, "admin", page)
 }
 
 func redirectToSsl(w http.ResponseWriter, r *http.Request) {
@@ -111,6 +127,7 @@ func main() {
 		// Register our handler functions
 		http.HandleFunc(UploadUrlPath, uploadHandler)
 		http.HandleFunc(DownloadUrlPath, assetHandler)
+		http.HandleFunc("/admin/", adminHandler)
 		http.HandleFunc("/", homeHandler)
 
 		// Listen

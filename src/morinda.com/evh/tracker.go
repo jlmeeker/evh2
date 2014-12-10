@@ -2,6 +2,10 @@
 // session and the files it contains.
 //
 // This data is persistent and stored on disk in an info.json file.
+//
+// The TrackerOfTrackers object is used for viewing all of the available
+// uploads currently in the system.  This is currently only used by
+// the /admin/ page.
 package main
 
 import (
@@ -13,6 +17,15 @@ import (
 	"strconv"
 	"time"
 )
+
+type TrackerOfTrackers struct {
+	ScanStart   time.Time
+	ScanStop    time.Time
+	Trackers    map[string]Tracker
+	TotalFiles  int
+	TotalSize   float64
+	TotalSizeMB float64
+}
 
 var TrackerFileName = "info.json"
 
@@ -113,4 +126,36 @@ func (t *Tracker) CountSaved() int {
 	}
 
 	return numSaved
+}
+
+// Scans all available downloads and compiles the info (this is for admin view)
+func NewTrackerOfTrackers() TrackerOfTrackers {
+	// Our result object
+	var toft = TrackerOfTrackers{}
+	toft.Trackers = make(map[string]Tracker)
+	toft.ScanStart = time.Now().Local()
+
+	fileinfos, err := ioutil.ReadDir(Config.Server.Assets)
+	if err != nil {
+		log.Println("ERROR: TofT is unable to read asset dir: ", err.Error())
+		toft.ScanStop = time.Now().Local()
+		return toft
+	}
+
+	// These should all be download dirs, but we'll check just in case
+	for _, info := range fileinfos {
+		if info.IsDir() {
+			var trackerfpath = filepath.Join(Config.Server.Assets, info.Name(), TrackerFileName)
+			tracker, trerr := LoadTrackerFromFile(trackerfpath)
+			if trerr == nil {
+				toft.TotalSize += tracker.Size
+				toft.TotalSizeMB = toft.TotalSize / 1024 / 1024
+				toft.TotalFiles += len(tracker.Files)
+				toft.Trackers[tracker.Dnldcode] = tracker
+			}
+		}
+	}
+
+	toft.ScanStop = time.Now().Local()
+	return toft
 }

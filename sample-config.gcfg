@@ -48,6 +48,9 @@ nopurgecheck=temp
 
 
 [server]
+; Enable /admin/ page
+allowadmin=false
+
 ; Address we use for download URLs
 address=127.0.0.1
 
