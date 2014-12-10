@@ -19,12 +19,14 @@ import (
 )
 
 type TrackerOfTrackers struct {
-	ScanStart   time.Time
-	ScanStop    time.Time
-	Trackers    map[string]Tracker
-	TotalFiles  int
-	TotalSize   float64
-	TotalSizeMB float64
+	ScanStart     time.Time
+	ScanStop      time.Time
+	Trackers      map[string]Tracker
+	TotalFiles    int
+	TotalSessions int
+	TotalSize     float64
+	TotalSizeMB   float64
+	TotalSizeGB   float64
 }
 
 var TrackerFileName = "info.json"
@@ -142,12 +144,14 @@ func NewTrackerOfTrackers() TrackerOfTrackers {
 
 	// These should all be download dirs, but we'll check just in case
 	for _, info := range fileinfos {
+		toft.TotalSessions++
 		if info.IsDir() {
 			var trackerfpath = filepath.Join(Config.Server.Assets, info.Name(), TrackerFileName)
 			tracker, trerr := LoadTrackerFromFile(trackerfpath)
 			if trerr == nil {
 				toft.TotalSize += tracker.Size
 				toft.TotalSizeMB = toft.TotalSize / 1024 / 1024
+				toft.TotalSizeGB = toft.TotalSize / 1024 / 1024 / 1024
 				toft.TotalFiles += len(tracker.Files)
 				toft.Trackers[tracker.Dnldcode] = tracker
 			}

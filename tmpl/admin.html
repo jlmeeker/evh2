@@ -13,13 +13,13 @@
       <tr><th>Description</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
         {{range .TrackerOfTrackers.Trackers}}
            <tr>
-           <td class="filename"><a href="{{$baseurl}}{{$dnldpath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{.Description}}</a></td>
+           <td class="filename"><a href="{{$baseurl}}{{$dnldpath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
            <td class="size">{{printf "%.2f" .SizeMB}} MB</td>
            <td class="size">{{len .Files}}</td>
            <td class="date">{{.ExpirationStr}}</td>
            </tr>
         {{end}}
-        <tr><th colspan=4 class="total">Total ({{.TrackerOfTrackers.TotalFiles}} files): &nbsp; &nbsp; {{printf "%.2f" .TrackerOfTrackers.TotalSizeMB}} MB</th></tr>
+        <tr><th colspan=4 class="total">Total ({{.TrackerOfTrackers.TotalFiles}} files, {{.TrackerOfTrackers.TotalSessions}} sessions): &nbsp; &nbsp; {{printf "%.2f" .TrackerOfTrackers.TotalSizeGB}} GB</th></tr>
       </table>
     {{end}}
     </div>
