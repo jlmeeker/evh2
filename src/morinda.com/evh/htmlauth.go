@@ -7,7 +7,6 @@ package main
 
 import (
 	"encoding/base64"
-	"log"
 	"net/http"
 	"strings"
 )
