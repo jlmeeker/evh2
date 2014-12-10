@@ -70,7 +70,6 @@ func LoadTrackerFromFile(fpath string) (tracker Tracker, trackererr error) {
 	// Read in file contents
 	rawdata, err := ioutil.ReadFile(fpath)
 	if err != nil {
-		log.Println(err.Error())
 		trackererr = err
 		return
 	}
@@ -78,7 +77,6 @@ func LoadTrackerFromFile(fpath string) (tracker Tracker, trackererr error) {
 	// convert from json to tracker object
 	err = json.Unmarshal(rawdata, &tracker)
 	if err != nil {
-		log.Println(err.Error())
 		trackererr = err
 		return
 	}

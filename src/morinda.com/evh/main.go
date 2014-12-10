@@ -27,6 +27,7 @@ var ProgressFlag bool
 var ServerFlag bool
 var SrcEmailFlag string
 var UrlFlag string
+var Evh1ImportFlag bool
 
 // Global Variables
 var UploadUrlPath = "/upload/"
@@ -52,6 +53,7 @@ func init() {
 	flag.StringVar(&FileDescrFlag, "description", "", "File desription (use quotes) (client only)")
 	flag.BoolVar(&ProgressFlag, "progress", true, "Show progress bar during upload (client only)")
 	flag.StringVar(&ExpirationFlag, "expires", "", "Example 1:d for 1 day (client only)")
+	flag.BoolVar(&Evh1ImportFlag, "import", false, "Import data from EVH1 instance (client only)")
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -152,6 +154,12 @@ func main() {
 			log.Fatal("ERROR: non-ssl listen problem: " + listenErr.Error())
 		}
 	} else {
+		// Run import if requested
+		if Evh1ImportFlag {
+			SpitSlurp()
+			return
+		}
+
 		// Final sanity check
 		if Config.Client.DestEmail == "" {
 			log.Println("WARNING: no -destemail value set, cannot send reciever an email")

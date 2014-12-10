@@ -110,3 +110,26 @@ progress=true
 
 ; Expiration (valid suffixes are: m=minute, h=hour, d=day, w=week)
 expiration=1:d
+
+
+[evh1]
+; db username ($dbuser from inc.php.local)
+dbuser=
+
+; db password ($dbpass from inc.php.local)
+dbpass=
+
+; dbhost ($dbhost from inc.php.local)
+dbhost=
+
+; dbname ($dbname from inc.php.local)
+dbname=
+
+; assets ($fpath from inc.php.local)
+assets=
+
+; timezone (ie America/Denver)
+timezone=
+
+; move files (false = copy only)
+move=false

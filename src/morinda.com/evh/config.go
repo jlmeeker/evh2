@@ -60,6 +60,15 @@ type Configuration struct {
 		Progress    bool
 		Url         string
 	}
+	Evh1 struct {
+		Assets   string
+		DbUser   string
+		DbPass   string
+		DbHost   string
+		DbName   string
+		Move     bool
+		Timezone string
+	}
 }
 
 // This is a global variable

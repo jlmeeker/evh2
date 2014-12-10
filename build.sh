@@ -18,6 +18,11 @@
 		go get github.com/cheggaaa/pb
 	fi
 
+	# https://github.com/go-sql-driver/mysql
+	if [ ! -e src/github.com/go-sql-driver/mysql ]; then
+		go get github.com/go-sql-driver/mysql
+	fi
+
 
 # Format Go sources
 #
