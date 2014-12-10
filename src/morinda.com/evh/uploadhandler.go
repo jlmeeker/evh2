@@ -101,7 +101,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 					// Update our tracker
 					page.Tracker.Files = append(page.Tracker.Files, newfile)
 					page.Tracker.Size += newfile.Size
-					page.Tracker.SizeMB += float64(page.Tracker.Size) / 1024 / 1024
+					page.Tracker.SizeMB = page.Tracker.Size / 1024 / 1024
 					page.Tracker.AddLog("Added file " + newfile.Name)
 				}
 			}
