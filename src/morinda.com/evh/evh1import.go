@@ -122,6 +122,8 @@ func SpitSlurp() {
 			moveerr := os.Rename(oldfile, newfile)
 			if moveerr != nil {
 				log.Println(dnldcode, "ERROR: Could not move file:", moveerr.Error())
+				RemoveDir(tracker.BaseDir)
+				continue
 			} else {
 				log.Println(dnldcode, "Move successful")
 			}
@@ -130,21 +132,24 @@ func SpitSlurp() {
 			dst, dsterr := os.Create(newfile)
 			if dsterr != nil {
 				log.Println(fmt.Sprintf("%s ERROR: could create empty file: %s", dnldcode, dsterr.Error()))
-				return
+				RemoveDir(tracker.BaseDir)
+				continue
 			}
 
 			// Open old file for copying
 			fhandle, tmpferr := os.Open(oldfile)
 			if tmpferr != nil {
 				log.Println(fmt.Sprintf("%s ERROR: could not open old file for copy: %s", dnldcode, tmpferr.Error()))
-				return
+				RemoveDir(tracker.BaseDir)
+				continue
 			}
 
 			// Copy the uploaded file to the destination file
 			bytes, cpyerr := io.Copy(dst, fhandle)
 			if cpyerr != nil {
 				log.Println(fmt.Sprintf("%s ERROR: could not write file contents: %s", dnldcode, cpyerr.Error()))
-				return
+				RemoveDir(tracker.BaseDir)
+				continue
 			}
 			fhandle.Close()
 			dst.Close()
