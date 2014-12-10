@@ -127,7 +127,7 @@ func main() {
 		// Register our handler functions
 		http.HandleFunc(UploadUrlPath, uploadHandler)
 		http.HandleFunc(DownloadUrlPath, assetHandler)
-		http.HandleFunc("/admin/", adminHandler)
+		http.HandleFunc("/admin/", BasicAuth(adminHandler))
 		http.HandleFunc("/", homeHandler)
 
 		// Listen

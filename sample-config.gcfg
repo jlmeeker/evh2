@@ -48,8 +48,14 @@ nopurgecheck=temp
 
 
 [server]
-; Enable /admin/ page
+; Enable /admin/ page (USE SSL, or the credentials below will be sent in plain text!!!)
 allowadmin=false
+
+; Admin user
+adminuser=admin
+
+; Admin user password
+adminpass=admin
 
 ; Address we use for download URLs
 address=127.0.0.1
