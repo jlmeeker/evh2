@@ -20,7 +20,8 @@ type File struct {
 	Size       float64
 	SizeMB     float64
 	Saved      bool
-	WhenSaved  string
+	When       time.Time
+	WhenStr    string
 }
 
 func NewFile(fname, dirpath string) File {
@@ -67,7 +68,8 @@ func (f *File) Save(tmpfh *multipart.FileHeader) error {
 		f.Size = float64(bytes)
 		f.SizeMB = f.Size / 1024 / 1024
 		f.Saved = true
-		f.WhenSaved = time.Now().Local().Format(TimeLayout)
+		f.When = time.Now().Local()
+		f.WhenStr = f.When.Format(TimeLayout)
 	}
 
 	return nil

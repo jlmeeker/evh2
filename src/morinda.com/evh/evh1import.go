@@ -80,6 +80,7 @@ func SpitSlurp() {
 
 		// New Tracker, lets get this file migrated!
 		tracker = NewTracker(dnldcode)
+		tracker.Files = make(map[string]File)
 		tracker.Description = description
 		tracker.Vercode = dnldcode
 		tracker.Expiration = avail
@@ -100,9 +101,10 @@ func SpitSlurp() {
 		file.Size = tracker.Size
 		file.SizeMB = tracker.SizeMB
 		file.Saved = true
-		file.WhenSaved = tracker.When.Format(TimeLayout)
+		file.When = tracker.When
+		file.WhenStr = file.When.Format(TimeLayout)
 
-		tracker.Files = append(tracker.Files, file)
+		tracker.Files[file.Name] = file
 
 		// Create new asset dir
 		mkdirerr := os.MkdirAll(tracker.BaseDir, 0700)

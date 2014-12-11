@@ -40,7 +40,7 @@ type Tracker struct {
 	Expiration     string
 	ExpirationDate time.Time
 	ExpirationStr  string
-	Files          []File
+	Files          map[string]File
 	Log            map[string]string
 	SrcEmail       string
 	Size           float64

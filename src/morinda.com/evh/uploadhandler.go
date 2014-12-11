@@ -54,6 +54,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Setup our tracker
 		page.Tracker = NewTracker(req.Dnldcode)
+		page.Tracker.Files = make(map[string]File)
 
 		// This is the download URL for the session, not used for individual files
 		req.Log("New incoming transfer starting for", r.RemoteAddr)
@@ -98,7 +99,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 					}
 
 					// Update our tracker
-					page.Tracker.Files = append(page.Tracker.Files, newfile)
+					page.Tracker.Files[newfile.Name] = newfile
 					page.Tracker.Size += newfile.Size
 					page.Tracker.SizeMB = page.Tracker.Size / 1024 / 1024
 					page.Tracker.AddLog("Added file " + newfile.Name)
