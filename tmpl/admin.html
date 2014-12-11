@@ -14,7 +14,7 @@
         {{range .TrackerOfTrackers.Trackers}}
            <tr>
            <td class="filename"><a href="{{$baseurl}}{{$dnldpath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
-           <td class="date">{{.SrcEmail}}</td>
+           <td class="size">{{.SrcEmail}}</td>
            <td class="size">{{printf "%.2f" .SizeMB}} MB</td>
            <td class="size">{{len .Files}}</td>
            <td class="date">{{.ExpirationStr}}</td>
