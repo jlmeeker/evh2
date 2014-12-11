@@ -5,15 +5,16 @@
     <div class="message">&nbsp;</div>
     {{if .Message}}
       <table width="100%" class="files">
-      <tr><th>Description</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
+      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
       <tr><td colspan=4>{{.Message}}</td></tr>
       </table>
     {{else}}
       <table width="100%" class="files">
-      <tr><th>Description</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
+      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
         {{range .TrackerOfTrackers.Trackers}}
            <tr>
            <td class="filename"><a href="{{$baseurl}}{{$dnldpath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
+           <td class="date">{{.SrcEmail}}</td>
            <td class="size">{{printf "%.2f" .SizeMB}} MB</td>
            <td class="size">{{len .Files}}</td>
            <td class="date">{{.ExpirationStr}}</td>
