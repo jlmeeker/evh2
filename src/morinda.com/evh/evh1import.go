@@ -82,14 +82,19 @@ func SpitSlurp() {
 		tracker = NewTracker(dnldcode)
 		tracker.Description = description
 		tracker.Vercode = dnldcode
-		tracker.When = indate
-		tracker.ExpirationDate = outdate
 		tracker.Expiration = avail
-		tracker.ExpirationStr = tracker.ExpirationDate.Format(TimeLayout)
 		tracker.SrcEmail = srcemail
 		tracker.DstEmail = destemail
 		tracker.Size = float64(size)
 		tracker.SizeMB = tracker.Size / 1024 / 1024
+
+		// Since the admin page needs every tracker to have a unique ExpirationDate timestamp,
+		// and EVH1 only stored the day of the upload, we need to make the timestamp unique.
+		// This is done by adding the Files.id integer to the time as milliseconds.
+		// While we are at it, why not make the upload time unique too.
+		tracker.ExpirationDate = outdate.Add(time.Nanosecond * time.Duration(fileid))
+		tracker.ExpirationStr = tracker.ExpirationDate.Format(TimeLayout)
+		tracker.When = indate.Add(time.Nanosecond * time.Duration(fileid))
 
 		var file = NewFile(name, tracker.BaseDir)
 		file.Size = tracker.Size

@@ -21,7 +21,7 @@ import (
 type TrackerOfTrackers struct {
 	ScanStart     time.Time
 	ScanStop      time.Time
-	Trackers      map[string]Tracker
+	Trackers      map[int64]Tracker
 	TotalFiles    int
 	TotalSessions int
 	TotalSize     float64
@@ -132,7 +132,7 @@ func (t *Tracker) CountSaved() int {
 func NewTrackerOfTrackers() TrackerOfTrackers {
 	// Our result object
 	var toft = TrackerOfTrackers{}
-	toft.Trackers = make(map[string]Tracker)
+	toft.Trackers = make(map[int64]Tracker)
 	toft.ScanStart = time.Now().Local()
 
 	fileinfos, err := ioutil.ReadDir(Config.Server.Assets)
@@ -144,16 +144,18 @@ func NewTrackerOfTrackers() TrackerOfTrackers {
 
 	// These should all be download dirs, but we'll check just in case
 	for _, info := range fileinfos {
-		toft.TotalSessions++
 		if info.IsDir() {
 			var trackerfpath = filepath.Join(Config.Server.Assets, info.Name(), TrackerFileName)
 			tracker, trerr := LoadTrackerFromFile(trackerfpath)
 			if trerr == nil {
+				toft.TotalSessions++
 				toft.TotalSize += tracker.Size
 				toft.TotalSizeMB = toft.TotalSize / 1024 / 1024
 				toft.TotalSizeGB = toft.TotalSize / 1024 / 1024 / 1024
 				toft.TotalFiles += len(tracker.Files)
-				toft.Trackers[tracker.Dnldcode] = tracker
+				toft.Trackers[tracker.ExpirationDate.UnixNano()] = tracker
+			} else {
+				log.Println("ERROR: ", trerr.Error())
 			}
 		}
 	}
