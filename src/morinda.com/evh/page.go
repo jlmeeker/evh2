@@ -21,6 +21,7 @@ type Page struct {
 	Expirations       map[int]Expiration
 	HttpProto         string
 	Message           template.HTML
+	StatusCode        int
 	Total             float64
 	Tracker           Tracker
 	UploadUrlPath     string
@@ -45,12 +46,19 @@ func NewPage() Page {
 		BaseUrl:         url,
 		DownloadUrlPath: DownloadUrlPath,
 		UploadUrlPath:   Config.Server.UrlPrefix + UploadUrlPath,
+		StatusCode:      200,
 	}
 }
 
-// Render the template and send it to the client
-func DisplayPage(w http.ResponseWriter, r *http.Request, tmpl string, data interface{}) {
-	if SiteDown {
+// Render the template and send it to the client (or show 404)
+func DisplayPage(w http.ResponseWriter, r *http.Request, tmpl string, data Page) {
+	w.WriteHeader(data.StatusCode)
+	if data.StatusCode == http.StatusNotFound {
+		err := Templates.ExecuteTemplate(w, "404", data)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	} else if SiteDown {
 		var fpath = filepath.Join(Config.Server.Templates, "maintenance.html")
 		http.ServeFile(w, r, fpath)
 	} else {

@@ -32,6 +32,7 @@ var Evh1ImportFlag bool
 // Global Variables
 var UploadUrlPath = "/upload/"
 var DownloadUrlPath = "/download/"
+var AdminUrlPath = "/admin/"
 var Files []string
 var HttpProto = "http"
 var SiteDown bool
@@ -96,8 +97,8 @@ func main() {
 		// Register our handler functions
 		http.HandleFunc(UploadUrlPath, SSLCheck(UploadHandler))
 		http.HandleFunc(DownloadUrlPath, SSLCheck(AssetHandler))
-		http.HandleFunc("/admin/", BasicAuth(SSLCheck(AdminHandler)))
-		http.HandleFunc("/", SSLCheck(HomeHandler))
+		http.HandleFunc(AdminUrlPath, BasicAuth(SSLCheck(AdminHandler)))
+		http.HandleFunc("/", Evh1Intercept(SSLCheck(HomeHandler)))
 
 		// Listen
 		log.Println("Listening...")

@@ -5,6 +5,7 @@ package main
 
 import (
 	"encoding/base64"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -13,19 +14,23 @@ type handler func(w http.ResponseWriter, r *http.Request)
 
 // Handles / requests
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	// Redirect to SSL if enabled
-	if r.TLS == nil && Config.Server.Ssl {
-		redirectToSsl(w, r)
-		return
+	var page = NewPage()
+
+	if r.URL.Path != "/" {
+		page.StatusCode = 404
 	}
 
-	var page = NewPage()
 	DisplayPage(w, r, "home", page)
 }
 
 // Handles /admin/ requests
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
 	var page = NewPage()
+
+	if r.URL.Path != "/admin/" {
+		page.StatusCode = 404
+	}
+
 	if Config.Server.AllowAdmin {
 		page.TrackerOfTrackers = NewTrackerOfTrackers()
 	} else {
@@ -38,20 +43,19 @@ func AdminHandler(w http.ResponseWriter, r *http.Request) {
 // Wrapper for checking for SSL (if required)
 func SSLCheck(pass handler) handler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Redirect to SSL if enabled
+		// Redirect to SSL if enabled and not requested
 		if r.TLS == nil && Config.Server.Ssl {
-			redirectToSsl(w, r)
+			var url = fmt.Sprintf("https://%s", Config.Server.Address)
+			if Config.Server.SslPort != "443" {
+				url = fmt.Sprintf("%s:%s", url, Config.Server.SslPort)
+			}
+			url = fmt.Sprintf("%s%s", url, r.RequestURI)
+			http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 			return
 		}
 
 		pass(w, r)
 	}
-}
-
-// Helper function for SSLCheck
-func redirectToSsl(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "https://"+Config.Server.Address+":"+Config.Server.SslPort+r.RequestURI, http.StatusTemporaryRedirect)
-	return
 }
 
 // Wrapper for ensuring HTML Basic Authentication
@@ -90,4 +94,27 @@ func Validate(username, password string) bool {
 		return true
 	}
 	return false
+}
+
+// Wrapper to intercept EVH1 download requests
+func Evh1Intercept(pass handler) handler {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Get our GET request variable(s)
+		var vercode = r.URL.Query().Get("vercode")
+		var fid = r.URL.Query().Get("fid")
+
+		// Redirect to download page if vercode is set
+		if r.URL.Path == "/sendfile.php" && fid != "" && vercode != "" {
+			var url = fmt.Sprintf("%s/%s?vercode=%s", DownloadUrlPath, vercode, vercode)
+			http.Redirect(w, r, url, http.StatusMovedPermanently)
+			return
+		}
+
+		if r.URL.Path == "/tnadmin/" {
+			http.Redirect(w, r, AdminUrlPath, http.StatusMovedPermanently)
+			return
+		}
+
+		pass(w, r)
+	}
 }

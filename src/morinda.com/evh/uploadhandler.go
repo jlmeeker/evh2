@@ -21,6 +21,11 @@ import (
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// Get a new Page object
 	var page = NewPage()
+
+	if r.URL.Path != UploadUrlPath {
+		page.StatusCode = 404
+	}
+
 	// Set the appropriate protocol prefix for URLs
 	if r.TLS != nil {
 		page.HttpProto = "https"
