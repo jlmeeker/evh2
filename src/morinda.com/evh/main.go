@@ -56,39 +56,6 @@ func init() {
 	flag.BoolVar(&Evh1ImportFlag, "import", false, "Import data from EVH1 instance (client only)")
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	// Redirect to SSL if enabled
-	if r.TLS == nil && Config.Server.Ssl {
-		redirectToSsl(w, r)
-		return
-	}
-
-	var page = NewPage()
-	DisplayPage(w, r, "home", page)
-}
-
-func adminHandler(w http.ResponseWriter, r *http.Request) {
-	// Redirect to SSL if enabled
-	if r.TLS == nil && Config.Server.Ssl {
-		redirectToSsl(w, r)
-		return
-	}
-
-	var page = NewPage()
-	if Config.Server.AllowAdmin {
-		page.TrackerOfTrackers = NewTrackerOfTrackers()
-	} else {
-		page.Message = "Access denied."
-	}
-
-	DisplayPage(w, r, "admin", page)
-}
-
-func redirectToSsl(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "https://"+Config.Server.Address+":"+Config.Server.SslPort+r.RequestURI, http.StatusTemporaryRedirect)
-	return
-}
-
 func main() {
 	flag.Parse()
 
@@ -127,10 +94,10 @@ func main() {
 		go ScrubDownloads()
 
 		// Register our handler functions
-		http.HandleFunc(UploadUrlPath, uploadHandler)
-		http.HandleFunc(DownloadUrlPath, assetHandler)
-		http.HandleFunc("/admin/", BasicAuth(adminHandler))
-		http.HandleFunc("/", homeHandler)
+		http.HandleFunc(UploadUrlPath, SSLCheck(UploadHandler))
+		http.HandleFunc(DownloadUrlPath, SSLCheck(AssetHandler))
+		http.HandleFunc("/admin/", BasicAuth(SSLCheck(AdminHandler)))
+		http.HandleFunc("/", SSLCheck(HomeHandler))
 
 		// Listen
 		log.Println("Listening...")

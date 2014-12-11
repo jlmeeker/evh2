@@ -18,13 +18,7 @@ import (
 )
 
 //This is where the action happens.
-func uploadHandler(w http.ResponseWriter, r *http.Request) {
-	// Redirect to SSL if enabled
-	if r.TLS == nil && Config.Server.Ssl {
-		redirectToSsl(w, r)
-		return
-	}
-
+func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// Get a new Page object
 	var page = NewPage()
 	// Set the appropriate protocol prefix for URLs

@@ -12,19 +12,13 @@ import (
 	"strings"
 )
 
-func assetHandler(w http.ResponseWriter, r *http.Request) {
+func AssetHandler(w http.ResponseWriter, r *http.Request) {
 	// Get initial client address
 	var requestAddr = r.RemoteAddr
 
 	// Get accurate client address
 	if val, ok := r.Header["X-Forwarded-For"]; ok {
 		requestAddr = strings.Join(val, ",")
-	}
-
-	// Redirect to SSL if enabled
-	if r.TLS == nil && Config.Server.Ssl {
-		redirectToSsl(w, r)
-		return
 	}
 
 	var dnldcode string
