@@ -9,7 +9,7 @@
               <tr><td class="label">From:</td><td><input type="text" name="SrcEmail"/></td></tr>
               <tr><td class="label">To:</td><td><input type="text" name="DstEmail"/> (comma delimited)</td></tr>
               <tr><td class="label">Description:</td><td><textarea name="FileDescr" wrap="hard" rows="10"></textarea></td></tr>
-              <tr><td class="label">File(s):</td><td><input type="file" name="myfiles" id="myfiles" multiple></td></tr>
+              <tr><td class="label">File(s):</td><td><input type="file" name="myfiles" id="myfiles" multiple>(Use Shift/Ctrl/Command to select multiple files)</td></tr>
               <tr><td class="label">Expires</td><td><select name="Expires">{{range $val := .Expirations}}<option value="{{$val.Key}}">{{$val.Value}}</option>{{end}}</select></td></tr>
               <tr><td colspan=3><br><br><input type="submit" name="submit" value="Submit"></td></tr>
             </table>
