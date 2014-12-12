@@ -69,8 +69,17 @@ nonsslport=8080
 ; SSL Port
 sslport=8443
 
-; Mail Server for outgoing email in the format of hostname:port
-mailserver=mail.somewhere.com:25
+; Mail Server for outgoing email in the format of hostname
+mailserver=
+
+; Mail Server port
+mailport=
+
+; Mail Server username
+mailuser=
+
+; Mail Server password
+mailpass=
 
 ; Asset directory (where uploads are stored)
 assets=./assets
