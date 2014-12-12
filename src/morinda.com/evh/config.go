@@ -45,6 +45,7 @@ type Configuration struct {
 		MailUser   string
 		MailPass   string
 		Mailserver string
+		MailPort   string
 		NonSslPort string
 		Ssl        bool
 		SslPort    string

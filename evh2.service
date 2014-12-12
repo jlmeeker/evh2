@@ -1,0 +1,15 @@
+[Unit]
+Description=EVH2 server daemon
+After=syslog.target network.target auditd.service
+
+[Service]
+EnvironmentFile=
+ExecStartPre=
+ExecStart=/opt/evh2/bin/evh -server -c /opt/evh2/local-config.gcfg
+ExecReload=/bin/kill $MAINPID; /opt/evh2/bin/evh -server -c /opt/evh2/local-config.gcfg
+KillMode=process
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=basic.target

@@ -72,9 +72,15 @@ func (r *EvhRequest) SendEmail(p *Page, tmplname string) {
 
 	// Read from our buffer the result of the template
 	var body = buffer.Bytes()
+	var auth = smtp.PlainAuth("", Config.Server.MailUser, Config.Server.MailPass, Config.Server.Mailserver)
 
 	// Send email
-	err = smtp.SendMail(Config.Server.Mailserver, nil, p.Tracker.SrcEmail, toEmails, body)
+	if Config.Server.MailUser == "" {
+		err = smtp.SendMail(Config.Server.Mailserver+":"+Config.Server.MailPort, nil, p.Tracker.SrcEmail, toEmails, body)
+	} else {
+		err = smtp.SendMail(Config.Server.Mailserver+":"+Config.Server.MailPort, auth, p.Tracker.SrcEmail, toEmails, body)
+	}
+
 	if err != nil {
 		r.Log("ERROR: Could not send email:", err.Error())
 		p.Tracker.AddLog("Error sending " + tmplname + " email: " + err.Error())
