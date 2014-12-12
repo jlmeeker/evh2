@@ -126,3 +126,13 @@ func ExtractFilename(cd string) string {
 func RemoveDir(dirpath string) error {
 	return os.RemoveAll(dirpath)
 }
+
+// Return a list of email domains from addresses
+func EmailDomain(addr string) (domain string) {
+	var addrParts = strings.Split(addr, "@")
+	if len(addrParts) == 2 {
+		return addrParts[1]
+	}
+
+	return ""
+}

@@ -15,6 +15,7 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"strings"
 )
 
 //This is where the action happens.
@@ -62,14 +63,55 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		// Parse the multipart form in the request (set max memory in bytes)
 		err := r.ParseMultipartForm(10000)
 		if err != nil {
-			page.Message = "Transfer aborted (client disconnected)"
+			page.Message = template.HTML("Transfer aborted (client disconnected)")
 			req.Log(string(page.Message))
+			DisplayPage(w, r, "upload", page)
+			return
 		} else {
 			// Store form values
 			page.Tracker.Description = r.FormValue("FileDescr")
 			page.Tracker.SrcEmail = r.FormValue("SrcEmail")
 			page.Tracker.DstEmail = r.FormValue("DstEmail")
 			page.Tracker.Expiration = r.FormValue("Expires")
+
+			// Validate emails against restrictions
+			if len(Config.Server.MailDomains) != 0 {
+				var domainokay bool
+				var allEmailAddresses = strings.Split(page.Tracker.DstEmail, ",")
+				allEmailAddresses = append(allEmailAddresses, page.Tracker.SrcEmail)
+
+				for _, domain := range Config.Server.MailDomains {
+					if Config.Server.MailDomainStrict == false && domainokay == true {
+						break
+					}
+					for _, addr := range allEmailAddresses {
+						var emdomain = EmailDomain(addr)
+						if emdomain == domain {
+							domainokay = true
+
+							if Config.Server.MailDomainStrict == false {
+								break
+							}
+						} else {
+							domainokay = false
+						}
+
+						if Config.Server.MailDomainStrict && domainokay == false {
+							page.Message = template.HTML("Upload not authorized")
+							req.Log("MailDomainStrict enabled and non-compliant email found, upload discarded: " + addr)
+							DisplayPage(w, r, "upload", page)
+							return
+						}
+					}
+				}
+
+				if domainokay == false {
+					page.Message = template.HTML("Upload not authorized")
+					req.Log("No compliant email domain(s) found, upload discarded")
+					DisplayPage(w, r, "upload", page)
+					return
+				}
+			}
 
 			if r.FormValue("client") == "1" {
 				page.Tracker.CliUpload = true

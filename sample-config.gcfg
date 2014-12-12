@@ -42,9 +42,9 @@ purgefreq=60
 ; Frequency to refresh HTML templates (minutes)
 tmplfreq=1
 
-; Dir not to check when purging (multiple okay)
-nopurgecheck=tmp
-nopurgecheck=temp
+; Subdir of assets to skip when purging (multiple okay)
+;nopurgecheck=tmp
+;nopurgecheck=temp
 
 
 [server]
@@ -80,6 +80,13 @@ mailuser=
 
 ; Mail Server password
 mailpass=
+
+; Either the srcemail or one of the destination emails must be from one of these domains (multiple okay)
+;maildomain=mydomain.com
+;maildomain=my2nddomain.com
+
+; Disallow emails to addresses NOT in the above maildomain list
+maildomainstrict=false
 
 ; Asset directory (where uploads are stored)
 assets=./assets

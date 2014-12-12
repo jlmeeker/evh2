@@ -33,24 +33,26 @@ type Configuration struct {
 		NoPurgeCheck []string
 	}
 	Server struct {
-		Address    string
-		AdminKey   string
-		AdminPass  string
-		AdminUser  string
-		AllowAdmin bool
-		Assets     string
-		CertFile   string `gcfg:"cert"`
-		KeyFile    string `gcfg:"key"`
-		ListenAddr string
-		MailUser   string
-		MailPass   string
-		Mailserver string
-		MailPort   string
-		NonSslPort string
-		Ssl        bool
-		SslPort    string
-		Templates  string
-		UrlPrefix  string
+		Address          string
+		AdminKey         string
+		AdminPass        string
+		AdminUser        string
+		AllowAdmin       bool
+		Assets           string
+		CertFile         string `gcfg:"cert"`
+		KeyFile          string `gcfg:"key"`
+		ListenAddr       string
+		MailUser         string
+		MailPass         string
+		Mailserver       string
+		MailPort         string
+		MailDomains      []string `gcfg:"maildomain"`
+		MailDomainStrict bool
+		NonSslPort       string
+		Ssl              bool
+		SslPort          string
+		Templates        string
+		UrlPrefix        string
 	}
 	Client struct {
 		Description string
