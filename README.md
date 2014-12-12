@@ -9,7 +9,7 @@ EVH is designed to be a single-use file transfer system.  Its purpose is to repl
 
 * Easy to run on your own server (and port)
 * Just a single binary and a tmpl directory to get started (no language/library dependencies!!!)
-* VERY low memory usage (~10-20mb)
+* VERY low memory usage
 * File transfers are never loaded into memory, always streamed directly to/from disk
 * All uploads have an expiration.  As long as the server is running, cleanup happens automatically.
 * EMail notifications to uploader and to any number of recipients (with download links)
@@ -19,6 +19,7 @@ EVH is designed to be a single-use file transfer system.  Its purpose is to repl
 * Can be run as a client (to upload files) via CLI in a terminal (with progress bar)
 * Runs on Linux, Windows, OSX (same OS and architecture lists as Go)
 * Secure against XSS, SQL injection etc.
+* Backwards compatible with EVH1 (download and admin links will work, files can be migrated using EVH2 in client mode)
 * even more....
 
 EVH runs in two modes: server and client.  Server hosts a web server interface for uploading and downloading files.  The Client is for uploading only and runs in a terminal.  This app is designed to run on all platforms that Go supports.
@@ -47,6 +48,7 @@ Usage of ./bin/evh:
   -expires="": Example 1:d for 1 day (client only)
   -field="": Field name of the form (client only)
   -from="": Email address of uploader (client only)
+  -import=false: Import data from EVH1 instance (client only)
   -progress=true: Show progress bar during upload (client only)
   -server=false: Listen for incoming file uploads
   -to="": Comma separated set of email address(es) of file recipient(s) (client only)
