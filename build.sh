@@ -23,6 +23,11 @@
 		go get github.com/go-sql-driver/mysql
 	fi
 
+	# (windows only) https://github.com/olekukonko/ts
+	if [ ! -e src/github.com/go-sql-driver/mysql ]; then
+		go get github.com/olekukonko/ts
+	fi
+
 
 # Format Go sources
 #
@@ -38,5 +43,7 @@
 #
 	rm -rf $GOBIN/*
 	rm -rf $GOPATH/pkg/*
-	go install $FLAGS morinda.com/evh
-	GOARCH=386 go install $FLAGS morinda.com/evh
+	GOOS=linux GOARCH=amd64 go install $FLAGS morinda.com/evh
+	GOOS=linux GOARCH=386 go install $FLAGS morinda.com/evh
+	GOOS=windows GOARCH=amd64 go install $FLAGS morinda.com/evh
+	GOOS=darwin GOARCH=amd64 go install $FLAGS morinda.com/evh
