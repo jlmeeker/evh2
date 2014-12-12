@@ -86,7 +86,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 					}
 					for _, addr := range allEmailAddresses {
 						var emdomain = EmailDomain(addr)
-						if emdomain == domain {
+						if strings.Contains(strings.ToLower(emdomain), domain) {
 							domainokay = true
 
 							if Config.Server.MailDomainStrict == false {

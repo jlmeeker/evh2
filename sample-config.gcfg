@@ -82,10 +82,11 @@ mailuser=
 mailpass=
 
 ; Either the srcemail or one of the destination emails must be from one of these domains (multiple okay)
+; Keep these lower-case.
 ;maildomain=mydomain.com
 ;maildomain=my2nddomain.com
 
-; Disallow emails to addresses NOT in the above maildomain list
+; Force ALL emails to require domains present in maildomain
 maildomainstrict=false
 
 ; Asset directory (where uploads are stored)
