@@ -61,6 +61,7 @@ type Configuration struct {
 		Expiration  string
 		Field       string
 		Progress    bool
+		Proxy       string
 		Url         string
 	}
 	Evh1 struct {
@@ -110,5 +111,8 @@ func (c *Configuration) ImportFlags() {
 	}
 	if ExpirationFlag != "" {
 		c.Client.Expiration = ExpirationFlag
+	}
+	if ProxyUrlFlag != "" {
+		c.Client.Proxy = ProxyUrlFlag
 	}
 }

@@ -15,6 +15,7 @@ import (
 	"log"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -101,13 +102,31 @@ func Upload(fnames []string) {
 	request, err := newfileUploadRequest(extraParams, fnames)
 	checkerr(err)
 
+	// Setup proxy server (if set)
+	var proxyFunc func(*http.Request) (*url.URL, error)
+	if Config.Client.Proxy != "" {
+		if Config.Client.Proxy == "env" {
+			proxyFunc = http.ProxyFromEnvironment
+		} else {
+			proxyUrl, urlErr := url.Parse(Config.Client.Proxy)
+			if urlErr == nil {
+				proxyFunc = http.ProxyURL(proxyUrl)
+			} else {
+				log.Println("ERROR: Proxy url is unusable. Trying without a proxy.")
+			}
+		}
+	}
+
 	// POST our http request (this will contact the server, submit the form and start the file streams)
 	var tlsconfig = &tls.Config{
 		InsecureSkipVerify: true,
 	}
 	var transport http.RoundTripper = &http.Transport{
 		TLSClientConfig: tlsconfig,
+		Proxy:           proxyFunc,
 	}
+
+	// Create HTTP client object
 	var client = &http.Client{
 		Transport: transport,
 	}

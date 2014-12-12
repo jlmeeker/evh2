@@ -28,6 +28,7 @@ var ServerFlag bool
 var SrcEmailFlag string
 var UrlFlag string
 var Evh1ImportFlag bool
+var ProxyUrlFlag string
 
 // Global Variables
 var UploadUrlPath = "/upload/"
@@ -55,6 +56,7 @@ func init() {
 	flag.BoolVar(&ProgressFlag, "progress", true, "Show progress bar during upload (client only)")
 	flag.StringVar(&ExpirationFlag, "expires", "", "Example 1:d for 1 day (client only)")
 	flag.BoolVar(&Evh1ImportFlag, "import", false, "Import data from EVH1 instance (client only)")
+	flag.StringVar(&ProxyUrlFlag, "proxy", "", "URL/Address for proxy (env=use environment proxy, other=use as defined")
 }
 
 func main() {
