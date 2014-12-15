@@ -83,9 +83,9 @@ func (r *EvhRequest) SendEmail(p *Page, tmplname string) {
 
 	if err != nil {
 		r.Log("ERROR: Could not send email:", err.Error())
-		p.Tracker.AddLog("Error sending " + tmplname + " email: " + err.Error())
+		p.Tracker.AddLog("Error sending email to " + strings.Join(toEmails, ",") + ": " + err.Error())
 	} else {
-		p.Tracker.AddLog("Successfully sent " + tmplname + " email")
+		p.Tracker.AddLog("Successfully sent email to " + strings.Join(toEmails, ",") + "")
 	}
 }
 
