@@ -14,7 +14,7 @@ type handler func(w http.ResponseWriter, r *http.Request)
 
 // Handles / requests
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	var page = NewPage()
+	var page = NewPage(r)
 
 	if r.URL.Path != "/" {
 		page.StatusCode = 404
@@ -25,7 +25,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles /admin/ requests
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
-	var page = NewPage()
+	var page = NewPage(r)
 
 	if r.URL.Path != "/admin/" {
 		page.StatusCode = 404
@@ -45,7 +45,8 @@ func SSLCheck(pass handler) handler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Redirect to SSL if enabled and not requested
 		if r.TLS == nil && Config.Server.Ssl {
-			var url = fmt.Sprintf("https://%s", Config.Server.Address)
+			var hostparts = strings.Split(r.Host, ":")
+			var url = fmt.Sprintf("https://%s", hostparts[0])
 			if Config.Server.SslPort != "443" {
 				url = fmt.Sprintf("%s:%s", url, Config.Server.SslPort)
 			}

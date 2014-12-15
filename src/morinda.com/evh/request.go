@@ -36,7 +36,6 @@ func NewRequest(srcip string) (EvhRequest, error) {
 	// Generate dnldcode
 	var gcerr error
 	req.Dnldcode, gcerr = GenCode(true, 0)
-	req.DownloadURL = HttpProto + "://" + Config.Server.Address + DownloadUrlPath + req.Dnldcode + "?vercode="
 
 	return req, gcerr
 }

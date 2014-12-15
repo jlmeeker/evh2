@@ -1,30 +1,30 @@
 {{define "files"}}
-{{$tracker := .Tracker}}{{$baseurl := .BaseUrl}}{{$dnldpath := .DownloadUrlPath}}
+{{$page := .}}
 {{template "header" .}}
     <div class="container">
     <div class="message">&nbsp;</div>
-    {{if .Message}}
+    {{if $page.Message}}
       <table width="100%" class="files">
       <tr><th>Name</th><th class="size">Size</th><th class="date">Date</th></tr>
-      <tr><td colspan=3>{{.Message}}</td></tr>
+      <tr><td colspan=3>{{$page.Message}}</td></tr>
       </table>
     {{else}}
-      <strong>Submitter:</strong> {{$tracker.SrcEmail}}<br>
-      <strong>Sent To:</strong> {{$tracker.DstEmail}}<br>
-      <strong>Expires:</strong> {{$tracker.ExpirationStr}}<br>
-      <strong>Description:</strong><br>{{$tracker.Description}}<br>
+      <strong>Submitter:</strong> {{$page.Tracker.SrcEmail}}<br>
+      <strong>Sent To:</strong> {{$page.Tracker.DstEmail}}<br>
+      <strong>Expires:</strong> {{$page.Tracker.ExpirationStr}}<br>
+      <strong>Description:</strong><br>{{$page.Tracker.Description}}<br>
       <br>
       <table width="100%" class="files">
       <tr><th>Name</th><th class="size">Size</th><th class="date">Date</th></tr>
-        {{range .Tracker.Files}}
-           <tr><td class="filename"><a href="{{$baseurl}}{{$dnldpath}}{{$tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a></td><td class="size">{{printf "%.2f" .SizeMB}} MB</td><td class="date">{{.WhenStr}}</td></tr>
+        {{range $page.Tracker.Files}}
+           <tr><td class="filename"><a href="{{$page.DownloadUrlPath}}{{$page.Tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a></td><td class="size">{{printf "%.2f" .SizeMB}} MB</td><td class="date">{{.WhenStr}}</td></tr>
         {{end}}
-        <tr><th colspan=3 class="total">Total ({{len .Tracker.Files}} files): &nbsp; &nbsp; {{printf "%.2f" $tracker.SizeMB}} MB</th></tr>
+        <tr><th colspan=3 class="total">Total ({{len $page.Tracker.Files}} files): &nbsp; &nbsp; {{printf "%.2f" $page.Tracker.SizeMB}} MB</th></tr>
       </table>
       <br>
       <strong>Log:</strong><br>
       <div class="log">
-        {{range $time, $msg := .Tracker.Log}}
+        {{range $time, $msg := $page.Tracker.Log}}
         <strong><script>var milliseconds = Math.round({{$time}}/1000000); var d = new Date(milliseconds); document.write(d.toDateString());</script>: </strong>{{$msg}}<br>
         {{end}}
       </div>

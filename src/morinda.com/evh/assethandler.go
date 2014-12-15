@@ -25,7 +25,7 @@ func AssetHandler(w http.ResponseWriter, r *http.Request) {
 	var isfiledownload bool
 
 	// Get a new Page object
-	var page = NewPage()
+	var page = NewPage(r)
 
 	// Get our GET request variable(s)
 	var vercode = r.URL.Query().Get("vercode")

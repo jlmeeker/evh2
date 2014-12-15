@@ -9,7 +9,7 @@
   </head>
   <body>
   {{template "nav" .}}
-  <div class="title">{{.Config.Main.AppName}}</div>
+  <div class="title"><a href="{{.Config.Server.UrlPrefix}}/">{{.Config.Main.AppName}}</a></div>
   <div class="subtitle">{{.Config.Main.AppDesc}} (v{{.AppVer}})</div>
   <div class="clear"></div>
 {{end}}

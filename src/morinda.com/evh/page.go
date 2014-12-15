@@ -15,12 +15,12 @@ import (
 
 type Page struct {
 	AppVer            string
-	BaseUrl           string
 	Config            Configuration
 	DownloadUrlPath   string
 	Expirations       map[int]Expiration
 	HttpProto         string
 	Message           template.HTML
+	RequestHost       string
 	StatusCode        int
 	Total             float64
 	Tracker           Tracker
@@ -29,25 +29,25 @@ type Page struct {
 	TrackerOfTrackers TrackerOfTrackers
 }
 
-func NewPage() Page {
-	// Set the proper protocol and, if necessary, the port too
-	var url = HttpProto + "://" + Config.Server.Address
-	if Config.Server.Ssl && Config.Server.SslPort != "443" {
-		url = url + ":" + Config.Server.SslPort
-	} else if Config.Server.Ssl == false && Config.Server.NonSslPort != "80" && Config.Server.UrlPrefix == "" {
-		url = url + ":" + Config.Server.NonSslPort
-	}
-
-	return Page{
+func NewPage(r *http.Request) Page {
+	var p = Page{
 		Config:          Config,
 		Year:            time.Now().Local().Year(),
 		AppVer:          VERSION,
 		HttpProto:       HttpProto,
-		BaseUrl:         url,
 		DownloadUrlPath: DownloadUrlPath,
 		UploadUrlPath:   Config.Server.UrlPrefix + UploadUrlPath,
 		StatusCode:      200,
 	}
+
+	// Get accurate server name/address (detects if we are being proxied)
+	if _, ok := r.Header["X-Forwarded-Host"]; ok {
+		p.RequestHost = r.Header["X-Forwarded-Host"][0]
+	} else {
+		p.RequestHost = r.Host
+	}
+
+	return p
 }
 
 // Render the template and send it to the client (or show 404)

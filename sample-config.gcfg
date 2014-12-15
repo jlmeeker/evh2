@@ -57,9 +57,6 @@ adminuser=admin
 ; Admin user password
 adminpass=admin
 
-; Address we use for download URLs
-address=127.0.0.1
-
 ; Address we listen on (just the IP)
 listenaddr=127.0.0.1
 
@@ -99,9 +96,9 @@ assets=./assets
 templates=tmpl
 
 ; URL prefix (in case we're hosted behind a proxy path)
-;urlprefix=/new
+urlprefix=
 
-; Enable SSL or not (don't use if youre being proxied, see urlprefix above)
+; Enable SSL or not (don't use if youre being proxied as the HTTP server will proxy to the non-ssl port)
 ssl=false
 
 ; SSL certificate and key (both required for SSL)

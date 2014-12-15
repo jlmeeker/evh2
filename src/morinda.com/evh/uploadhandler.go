@@ -21,7 +21,7 @@ import (
 //This is where the action happens.
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// Get a new Page object
-	var page = NewPage()
+	var page = NewPage(r)
 
 	if r.URL.Path != UploadUrlPath {
 		page.StatusCode = 404
@@ -156,7 +156,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// DisplayPage result message (using template.HTML() allows the template to show the non-garbled URL)
-		var filespageurl = page.BaseUrl + DownloadUrlPath + page.Tracker.Dnldcode + "?vercode=" + page.Tracker.Vercode
+		var filespageurl = page.HttpProto + "://" + page.RequestHost + DownloadUrlPath + page.Tracker.Dnldcode + "?vercode=" + page.Tracker.Vercode
 		if r.FormValue("client") == "1" {
 			page.Message = template.HTML(fmt.Sprintf("Successfully uploaded %d of %d files.  Your files are available here:\n%s\n", page.Tracker.CountSaved(), filecount, filespageurl))
 			DisplayPage(w, r, "uploadPlain", page)

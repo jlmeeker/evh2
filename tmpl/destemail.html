@@ -1,20 +1,20 @@
-{{define "destemail"}}{{$config := .Config}}{{$tracker := .Tracker}}{{$baseurl := .BaseUrl}}{{$dnldpath := .DownloadUrlPath}}Subject: File(s) are ready for download at {{$config.Main.Company}}
+{{define "destemail"}}{{$page := .}}Subject: File(s) are ready for download at {{$page.Config.Main.Company}}
 MIME-version: 1.0;
 Content-Type: text/html; charset="UTF-8";
 
 
 {{template "emailheader" .}}
-Some uploaded files are ready for you.  Click a file name to download one, or click <a href="{{$baseurl}}{{$dnldpath}}{{$tracker.Dnldcode}}?vercode={{$tracker.Vercode}}">here</a> to see them all on the download page.<br><br>
+Some uploaded files are ready for you.  Click a file name to download one, or click <a href="{{$page.HttpProto}}://{{$page.RequestHost}}{{$page.DownloadUrlPath}}{{$page.Tracker.Dnldcode}}?vercode={{$page.Tracker.Vercode}}">here</a> to see them all on the download page.<br><br>
 <br>
 <strong>Description:</strong><br>
-{{.Tracker.Description}}<br>
+{{$page.Tracker.Description}}<br>
 <br>
-<strong>Files ({{len .Tracker.Files}}):</strong><br>
-{{range .Tracker.Files}}
-Name: <a href="{{$baseurl}}{{$dnldpath}}{{$tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a>
+<strong>Files ({{len $page.Tracker.Files}}):</strong><br>
+{{range $page.Tracker.Files}}
+Name: <a href="{{$page.HttpProto}}://{{$page.RequestHost}}{{$page.DownloadUrlPath}}{{$page.Tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a>
 <br>
 &nbsp; &nbsp; Size: {{printf "%.2f" .SizeMB}} MB<br>
 <br>
 {{end}}
-{{template "emailfooter"}}
+{{template "emailfooter" .}}
 {{end}}

@@ -1,5 +1,5 @@
 {{define "admin"}}
-{{$baseurl := .BaseUrl}}{{$dnldpath := .DownloadUrlPath}}
+{{$page := .}}
 {{template "header" .}}
     <div class="container">
     <div class="message">&nbsp;</div>
@@ -13,7 +13,7 @@
       <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
         {{range .TrackerOfTrackers.Trackers}}
            <tr>
-           <td class="filename"><a href="{{$baseurl}}{{$dnldpath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
+           <td class="filename"><a href="{{$page.DownloadUrlPath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
            <td class="size">{{.SrcEmail}}</td>
            <td class="size">{{printf "%.2f" .SizeMB}} MB</td>
            <td class="size">{{len .Files}}</td>

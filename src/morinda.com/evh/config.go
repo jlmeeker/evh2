@@ -33,7 +33,6 @@ type Configuration struct {
 		NoPurgeCheck []string
 	}
 	Server struct {
-		Address          string
 		AdminKey         string
 		AdminPass        string
 		AdminUser        string
