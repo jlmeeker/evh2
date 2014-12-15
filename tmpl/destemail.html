@@ -4,7 +4,7 @@ Content-Type: text/html; charset="UTF-8";
 
 
 {{template "emailheader" .}}
-I have uploaded some files for you.  Click a file name to download the file, or click <a href="{{$baseurl}}{{$dnldpath}}{{$tracker.Dnldcode}}?vercode={{$tracker.Vercode}}">here</a> to see them on the download page.<br><br>
+Some uploaded files are ready for you.  Click a file name to download one, or click <a href="{{$baseurl}}{{$dnldpath}}{{$tracker.Dnldcode}}?vercode={{$tracker.Vercode}}">here</a> to see them all on the download page.<br><br>
 <br>
 <strong>Description:</strong><br>
 {{.Tracker.Description}}<br>
