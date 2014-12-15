@@ -50,6 +50,7 @@ Usage of ./bin/evh:
   -from="": Email address of uploader (client only)
   -import=false: Import data from EVH1 instance (client only)
   -progress=true: Show progress bar during upload (client only)
+  -proxy="": URL/Address for proxy (env=use environment proxy, other=use as defined
   -server=false: Listen for incoming file uploads
   -to="": Comma separated set of email address(es) of file recipient(s) (client only)
   -url="": Remote server URL to send files to (client only)
