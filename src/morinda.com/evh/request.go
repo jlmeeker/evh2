@@ -54,31 +54,38 @@ func (r *EvhRequest) Log(msgs ...string) {
 
 //func (r *EvhRequest) SendEmail(subject, body, sender, recipients string) {
 func (r *EvhRequest) SendEmail(p *Page, tmplname string) {
+	var fromEmail string
 	var toEmails []string
 
-	// Setup our recipient email address
+	// Setup our recipient email address(es)
 	if tmplname == "senderemail" {
 		toEmails = strings.Split(p.Tracker.SrcEmail, ",")
 	} else {
 		toEmails = strings.Split(p.Tracker.DstEmail, ",")
 	}
 
+	// Setup our sender email address
+	if Config.Server.AppEmail != "" {
+		fromEmail = Config.Server.AppEmail
+	} else {
+		fromEmail = p.Tracker.SrcEmail
+	}
+
+	// Generate the body of the message
 	buffer := new(bytes.Buffer)
 	err := Templates.ExecuteTemplate(buffer, tmplname, p)
 	if err != nil {
 		r.Log(err.Error())
 		return
 	}
-
-	// Read from our buffer the result of the template
 	var body = buffer.Bytes()
-	var auth = smtp.PlainAuth("", Config.Server.MailUser, Config.Server.MailPass, Config.Server.Mailserver)
 
 	// Send email
 	if Config.Server.MailUser == "" {
-		err = smtp.SendMail(Config.Server.Mailserver+":"+Config.Server.MailPort, nil, p.Tracker.SrcEmail, toEmails, body)
+		err = smtp.SendMail(Config.Server.Mailserver+":"+Config.Server.MailPort, nil, fromEmail, toEmails, body)
 	} else {
-		err = smtp.SendMail(Config.Server.Mailserver+":"+Config.Server.MailPort, auth, p.Tracker.SrcEmail, toEmails, body)
+		var auth = smtp.PlainAuth("", Config.Server.MailUser, Config.Server.MailPass, Config.Server.Mailserver)
+		err = smtp.SendMail(Config.Server.Mailserver+":"+Config.Server.MailPort, auth, fromEmail, toEmails, body)
 	}
 
 	if err != nil {

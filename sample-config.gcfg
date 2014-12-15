@@ -69,6 +69,9 @@ nonsslport=8080
 ; SSL Port
 sslport=8443
 
+; Source address for EVH emails (empty=use uploader's email address as specified in the From field)
+appemail=evh@mydomain.com
+
 ; Mail Server for outgoing email in the format of hostname
 mailserver=
 

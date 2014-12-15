@@ -37,6 +37,7 @@ type Configuration struct {
 		AdminKey         string
 		AdminPass        string
 		AdminUser        string
+		AppEmail         string
 		AllowAdmin       bool
 		Assets           string
 		CertFile         string `gcfg:"cert"`
