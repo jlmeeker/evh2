@@ -40,7 +40,7 @@ var SiteDown bool
 var Templates *template.Template
 
 // Constants
-const VERSION = "2.5.4"
+const VERSION = "2.5.5"
 const TimeLayout = "Jan 2, 2006 at 3:04pm (MST)"
 
 func init() {
