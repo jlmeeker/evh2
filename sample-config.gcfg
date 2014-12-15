@@ -89,7 +89,7 @@ mailpass=
 ;maildomain=mydomain.com
 ;maildomain=my2nddomain.com
 
-; Force ALL emails to require domains present in maildomain
+; Force ALL emails to require domains present in maildomain (disabled if maildomain isn't set)
 maildomainstrict=false
 
 ; Asset directory (where uploads are stored)
