@@ -131,8 +131,22 @@ func RemoveDir(dirpath string) error {
 func EmailDomain(addr string) (domain string) {
 	var addrParts = strings.Split(addr, "@")
 	if len(addrParts) == 2 {
-		return addrParts[1]
+		return strings.ToLower(addrParts[1])
 	}
 
 	return ""
+}
+
+// Validates email(s) against config
+func ValidateEmailAddress(addr string) bool {
+	var emdomain string
+	emdomain = EmailDomain(addr)
+
+	for _, domain := range Config.Server.MailDomains {
+		if strings.HasSuffix(emdomain, strings.ToLower(domain)) {
+			return true
+		}
+	}
+
+	return false
 }

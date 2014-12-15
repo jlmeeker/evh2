@@ -80,34 +80,25 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 				var allEmailAddresses = strings.Split(page.Tracker.DstEmail, ",")
 				allEmailAddresses = append(allEmailAddresses, page.Tracker.SrcEmail)
 
-				for _, domain := range Config.Server.MailDomains {
-					if Config.Server.MailDomainStrict == false && domainokay == true {
-						break
+				for _, addr := range allEmailAddresses {
+					valid := ValidateEmailAddress(addr)
+					if valid {
+						domainokay = true
 					}
-					for _, addr := range allEmailAddresses {
-						var emdomain = EmailDomain(addr)
-						if strings.Contains(strings.ToLower(emdomain), domain) {
-							domainokay = true
 
-							if Config.Server.MailDomainStrict == false {
-								break
-							}
-						} else {
-							domainokay = false
-						}
-
-						if Config.Server.MailDomainStrict && domainokay == false {
-							page.Message = template.HTML("Upload not authorized")
-							req.Log("MailDomainStrict enabled and non-compliant email found, upload discarded: " + addr)
-							DisplayPage(w, r, "upload", page)
-							return
-						}
+					// An address failed, is this fatal?
+					if !valid && Config.Server.MailDomainStrict {
+						page.Message = template.HTML("Upload not authorized")
+						req.Log("MailDomainStrict enabled and non-compliant email found, upload discarded: " + addr)
+						DisplayPage(w, r, "upload", page)
+						return
 					}
 				}
 
-				if domainokay == false {
+				// None of the addressed passed the check, deny further processing
+				if !domainokay {
 					page.Message = template.HTML("Upload not authorized")
-					req.Log("No compliant email domain(s) found, upload discarded")
+					req.Log("MailDomains enabled and no compliant emails found, upload discarded")
 					DisplayPage(w, r, "upload", page)
 					return
 				}
@@ -122,14 +113,16 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 
 			// Get the *fileheaders and keep count of uploadedjack filesN
 			//   We don't care what the form field is called, just iterate over all form fields of type file
+			var filename string
+			var newfile File
 			for fieldname, files := range r.MultipartForm.File {
 				req.Log("Processing files field:", fieldname)
 				for i, _ := range files {
-					var filename = ScrubFilename(files[i].Header.Get("Content-Disposition"))
+					filename = ScrubFilename(files[i].Header.Get("Content-Disposition"))
 					filecount++
 
 					// Create a File object
-					var newfile = NewFile(filename, req.Path)
+					newfile = NewFile(filename, req.Path)
 
 					// Move the temp file to the permament location
 					err := newfile.Save(files[i])
