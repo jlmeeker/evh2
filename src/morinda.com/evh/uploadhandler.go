@@ -20,6 +20,13 @@ import (
 
 //This is where the action happens.
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
+	var requestAddr = r.RemoteAddr
+
+	// Get accurate client address
+	if val, ok := r.Header["X-Forwarded-For"]; ok {
+		requestAddr = strings.Join(val, ",")
+	}
+
 	// Get a new Page object
 	var page = NewPage(r)
 
@@ -47,7 +54,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		var filecount = 0
 
 		// New request object
-		req, reqerr := NewRequest(r.RemoteAddr)
+		req, reqerr := NewRequest(requestAddr)
 		if reqerr != nil {
 			req.Log(reqerr.Error())
 			return
@@ -58,7 +65,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		page.Tracker.Files = make(map[string]File)
 
 		// This is the download URL for the session, not used for individual files
-		req.Log("New incoming transfer starting for", r.RemoteAddr)
+		req.Log("New incoming transfer starting for", requestAddr)
 
 		// Parse the multipart form in the request (set max memory in bytes)
 		err := r.ParseMultipartForm(10000)
