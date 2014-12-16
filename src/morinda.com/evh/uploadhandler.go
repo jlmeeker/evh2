@@ -155,7 +155,6 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 				req.Log("Invalid expiration specified, using default of 1 day")
 				page.Tracker.ExpirationDate = expirations["1:d"]
 			}
-			page.Tracker.ExpirationStr = page.Tracker.ExpirationDate.Format(TimeLayout)
 
 			// Send notification
 			req.Notify(&page)

@@ -5,24 +5,26 @@
     <div class="message">&nbsp;</div>
     {{if .Message}}
       <table width="100%" class="files">
-      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
-      <tr><td colspan=5>{{.Message}}</td></tr>
+      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Uploaded*</th><th class="date">Expiration*</th></tr>
+      <tr><td colspan=6>{{.Message}}</td></tr>
       </table>
     {{else}}
       <table width="100%" class="files">
-      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Expiration</th></tr>
+      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Uploaded*</th><th class="date">Expiration*</th></tr>
         {{range .TrackerOfTrackers.Trackers}}
            <tr>
            <td class="filename"><a href="{{$page.DownloadUrlPath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
            <td class="size">{{.SrcEmail}}</td>
            <td class="size">{{printf "%.2f" .SizeMB}} MB</td>
            <td class="size">{{len .Files}}</td>
-           <td class="date">{{.ExpirationStr}}</td>
+           <td class="date"><script>jsDateISO({{.When}});</script></td>
+           <td class="date"><script>jsDateISO({{.ExpirationDate}});</script></td>
            </tr>
         {{end}}
-        <tr><th colspan=5 class="total">Total ({{.TrackerOfTrackers.TotalFiles}} files, {{.TrackerOfTrackers.TotalSessions}} sessions): &nbsp; &nbsp; {{printf "%.2f" .TrackerOfTrackers.TotalSizeGB}} GB</th></tr>
+        <tr><th colspan=6 class="total">Total ({{.TrackerOfTrackers.TotalFiles}} files, {{.TrackerOfTrackers.TotalSessions}} sessions): &nbsp; &nbsp; {{printf "%.2f" .TrackerOfTrackers.TotalSizeGB}} GB</th></tr>
       </table>
     {{end}}
+    <div class="note">* Dates and times are from the server.</div>
     </div>
 {{template "footer" .}}
 {{end}}

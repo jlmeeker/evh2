@@ -39,7 +39,7 @@ type Tracker struct {
 	DstEmail       string
 	Expiration     string
 	ExpirationDate time.Time
-	ExpirationStr  string
+	ExpirationStr  string `json:"-"` // unused as of 2.5.8
 	Files          map[string]File
 	Log            map[string]string
 	SrcEmail       string

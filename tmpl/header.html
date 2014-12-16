@@ -6,6 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
     <title>{{.Config.Main.AppName}} | {{.Config.Main.Company}}</title>
     {{template "styles" .}}
+    <script>
+    <!-- 
+    window.monthNames = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    function jsDate(timeNsec) {
+      var milliseconds = Math.round(timeNsec/1000000);
+      var d = new Date(milliseconds);
+      formatDate(d);
+    };
+    function jsDateISO(valStr) {
+      var d = new Date(valStr);
+      formatDate(d);
+    };
+    function formatDate(d) {
+      var hour = d.getHours() > 12 ? d.getHours() - 12 : d.getHours() == 0 ? 12 : d.getHours();
+      var min = d.getMinutes();
+      if (min < 10) {
+          min = "0" + min;
+      }
+      var ampm = d.getHours() < 12 ? "am" : "pm";
+      var date = d.getDate();
+      var month = window.monthNames[d.getMonth()];
+      var year = d.getFullYear();
+
+      document.write(month + " " + date + ", " + year + " at " + hour + ":" + min + ampm);
+    };
+    -->  
+    </script>
   </head>
   <body>
   {{template "nav" .}}
@@ -23,3 +50,5 @@
   </head>
   <body>
 {{end}}
+
+Dec 15, 2014 at 4:15pm (MST)

@@ -94,7 +94,6 @@ func SpitSlurp() {
 		// This is done by adding the Files.id integer to the time as milliseconds.
 		// While we are at it, why not make the upload time unique too.
 		tracker.ExpirationDate = outdate.Add(time.Nanosecond * time.Duration(fileid))
-		tracker.ExpirationStr = tracker.ExpirationDate.Format(TimeLayout)
 		tracker.When = indate.Add(time.Nanosecond * time.Duration(fileid))
 
 		var file = NewFile(name, tracker.BaseDir)
@@ -102,7 +101,6 @@ func SpitSlurp() {
 		file.SizeMB = tracker.SizeMB
 		file.Saved = true
 		file.When = tracker.When
-		file.WhenStr = file.When.Format(TimeLayout)
 
 		tracker.Files[file.Name] = file
 

@@ -21,7 +21,7 @@ type File struct {
 	SizeMB     float64
 	Saved      bool
 	When       time.Time
-	WhenStr    string
+	WhenStr    string `json:"-"` // unused as of 2.5.8
 }
 
 func NewFile(fname, dirpath string) File {
@@ -69,7 +69,6 @@ func (f *File) Save(tmpfh *multipart.FileHeader) error {
 		f.SizeMB = f.Size / 1024 / 1024
 		f.Saved = true
 		f.When = time.Now().Local()
-		f.WhenStr = f.When.Format(TimeLayout)
 	}
 
 	return nil
