@@ -41,7 +41,6 @@ var Templates *template.Template
 
 // Constants
 const VERSION = "2.5.8"
-const TimeLayout = "Jan 2, 2006 at 3:04pm"
 
 func init() {
 	flag.StringVar(&ConfigFileFlag, "c", "", "Location of the Configuration file")
