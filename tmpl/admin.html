@@ -5,12 +5,12 @@
     <div class="message">&nbsp;</div>
     {{if .Message}}
       <table width="100%" class="files">
-      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Uploaded*</th><th class="date">Expiration*</th></tr>
+      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="filecount">Files</th><th class="date">Uploaded*</th><th class="date">Expiration*</th></tr>
       <tr><td colspan=6>{{.Message}}</td></tr>
       </table>
     {{else}}
       <table width="100%" class="files">
-      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="size">Files</th><th class="date">Uploaded*</th><th class="date">Expiration*</th></tr>
+      <tr><th>Description</th><th class="date">Submitter</th><th class="size">Size (MB)</th><th class="filecount">Files</th><th class="date">Uploaded*</th><th class="date">Expiration*</th></tr>
         {{range .TrackerOfTrackers.Trackers}}
            <tr>
            <td class="filename"><a href="{{$page.DownloadUrlPath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
