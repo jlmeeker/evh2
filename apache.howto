@@ -2,12 +2,9 @@
 #   This one uses /new/ as a subpath to an existing site.
 #   Be sure to set the following in the config (to work with this example): 
 #     listenaddr=127.0.0.1
-#     urlprefix=/new
+#     urlprefix=<empty>
 #     ssl=false
-#     address=<vhost name>/new
 #     nonsslport=8080
     RewriteEngine on
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^/new/(.*)$ http://localhost:8080/$1 [P,L]
-    ProxyPassReverse /new/ http://localhost:8080/
+    ProxyPass / http://localhost:8080/
+    ProxyPassReverse / http://localhost:8080/
