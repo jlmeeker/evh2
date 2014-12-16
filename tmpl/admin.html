@@ -16,7 +16,7 @@
            <td class="filename"><a href="{{$page.DownloadUrlPath}}{{.Dnldcode}}?vercode={{.Vercode}}">{{if .Description}}{{.Description}}{{else}}(no description available){{end}}</a></td>
            <td class="size">{{.SrcEmail}}</td>
            <td class="size">{{printf "%.2f" .SizeMB}} MB</td>
-           <td class="size">{{len .Files}}</td>
+           <td class="filecount">{{len .Files}}</td>
            <td class="date"><script>jsDateISO({{.When}});</script></td>
            <td class="date"><script>jsDateISO({{.ExpirationDate}});</script></td>
            </tr>
