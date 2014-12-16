@@ -9,15 +9,16 @@
       <tr><td colspan=3>{{$page.Message}}</td></tr>
       </table>
     {{else}}
-      <strong>Submitter:</strong> {{$page.Tracker.SrcEmail}}<br>
-      <strong>Sent To:</strong> {{$page.Tracker.DstEmail}}<br>
-      <strong>Expires:*</strong> <script>jsDateISO({{$page.Tracker.ExpirationDate}});</script><br>
-      <strong>Description:</strong><br>{{$page.Tracker.Description}}<br>
+      <div class="metalabel">Submitter:</div> {{$page.Tracker.SrcEmail}}<br>
+      <div class="metalabel">Sent To:</div> {{$page.Tracker.DstEmail}}<br>
+      <div class="metalabel">Expires:*</div> <script>jsDateISO({{$page.Tracker.ExpirationDate}});</script><br>
+      <br>
+      <div class="metalabel">Description:</div><br>{{$page.Tracker.Description}}<br>
       <br>
       <table width="100%" class="files">
       <tr><th>Name</th><th class="size">Size</th><th class="date">Date*</th></tr>
         {{range $page.Tracker.Files}}
-           <tr><td class="filename description"><a href="{{$page.DownloadUrlPath}}{{$page.Tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a></td><td class="size">{{printf "%.2f" .SizeMB}} MB</td><td class="date"><script>jsDateISO({{.When}});</script></td></tr>
+           <tr><td class="filename"><a href="{{$page.DownloadUrlPath}}{{$page.Tracker.Dnldcode}}/{{.Base64Name}}">{{.Name}}</a></td><td class="size">{{printf "%.2f" .SizeMB}} MB</td><td class="date"><script>jsDateISO({{.When}});</script></td></tr>
         {{end}}
         <tr><th colspan=3 class="total">Total ({{len $page.Tracker.Files}} files): &nbsp; &nbsp; {{printf "%.2f" $page.Tracker.SizeMB}} MB</th></tr>
       </table>
@@ -26,7 +27,7 @@
       <strong>Activity:*</strong><br>
       <div class="log">
         {{range $time, $msg := $page.Tracker.Log}}
-        <strong><script>jsDate({{$time}});</script>: </strong>{{$msg}}<br>
+        <div class="loglabel"><script>jsDate({{$time}});</script>:</div>{{$msg}}<br>
         {{end}}
       </div>
       <br>
