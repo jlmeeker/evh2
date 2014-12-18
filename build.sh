@@ -24,7 +24,7 @@
 	fi
 
 	# (windows only) https://github.com/olekukonko/ts
-	if [ ! -e src/github.com/go-sql-driver/mysql ]; then
+	if [ ! -e src/github.com/olekukonko/ts ]; then
 		go get github.com/olekukonko/ts
 	fi
 
