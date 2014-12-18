@@ -1,6 +1,4 @@
 // These functions are http handlers too small to warrant their own file.
-//
-// NOTE: You REALLY want SSL setup if you are using this!!!
 package main
 
 import (
@@ -27,7 +25,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func AdminHandler(w http.ResponseWriter, r *http.Request) {
 	var page = NewPage(r)
 
-	if r.URL.Path != "/admin/" {
+	if r.URL.Path != AdminUrlPath {
 		page.StatusCode = 404
 	}
 
