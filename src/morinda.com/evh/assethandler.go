@@ -36,6 +36,7 @@ func AssetHandler(w http.ResponseWriter, r *http.Request) {
 	// Do not build a file list for root downloads dir
 	if reqpath == "" {
 		page.Message = "File(s) not found"
+		page.StatusCode = 404
 		DisplayPage(w, r, "files", page)
 		return
 	}
