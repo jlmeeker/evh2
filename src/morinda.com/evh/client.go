@@ -51,7 +51,7 @@ func streamingUploadFile(params map[string]string, paths []string, w *io.PipeWri
 
 		// Initialize the progress bar (if requested)
 		if Config.Client.Progress {
-			bar := pb.New(int(fi.Size())).SetUnits(pb.U_BYTES)
+			bar := pb.New64(fi.Size()).SetUnits(pb.U_BYTES)
 			bar.ShowTimeLeft = true
 			bar.ShowSpeed = true
 			bar.SetMaxWidth(120)

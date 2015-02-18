@@ -37,7 +37,7 @@ func AssetHandler(w http.ResponseWriter, r *http.Request) {
 	if reqpath == "" {
 		page.Message = "File(s) not found"
 		page.StatusCode = 404
-		DisplayPage(w, r, "files", page)
+		DisplayPage(w, r, "404", page)
 		return
 	}
 
@@ -62,7 +62,8 @@ func AssetHandler(w http.ResponseWriter, r *http.Request) {
 	if trackererr != nil {
 		log.Println("Tracker file not found: " + dnldcode)
 		page.Message = "File(s) not found"
-		DisplayPage(w, r, "files", page)
+		page.StatusCode = 404
+		DisplayPage(w, r, "404", page)
 		return
 	}
 	page.Tracker = tracker
@@ -123,7 +124,8 @@ func AssetHandler(w http.ResponseWriter, r *http.Request) {
 		if vercode != tracker.Vercode || vercode == "" {
 			page.Message = "File(s) not found"
 			req.Log("invalid vercode (" + vercode + " != " + page.Tracker.Vercode + "), access denied for " + requestAddr)
-			DisplayPage(w, r, "files", page)
+			page.StatusCode = 404
+			DisplayPage(w, r, "404", page)
 			return
 		}
 	}
