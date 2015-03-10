@@ -10,6 +10,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"flag"
 	"html/template"
 	"log"
@@ -110,7 +111,12 @@ func main() {
 				return
 			}
 			var addrSsl = Config.Server.ListenAddr + ":" + Config.Server.SslPort
-			listenErrSsl := http.ListenAndServeTLS(addrSsl, Config.Server.CertFile, Config.Server.KeyFile, nil)
+			//listenErrSsl := http.ListenAndServeTLS(addrSsl, Config.Server.CertFile, Config.Server.KeyFile, nil)
+
+			var config = &tls.Config{MinVersion: tls.VersionTLS10}
+			var server = &http.Server{Addr: addrSsl, TLSConfig: config}
+			listenErrSsl := server.ListenAndServeTLS(Config.Server.CertFile, Config.Server.KeyFile)
+
 			if listenErrSsl != nil {
 				log.Fatal("ERROR: ssl listen problem: " + listenErrSsl.Error())
 			}
