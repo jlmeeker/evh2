@@ -41,7 +41,7 @@ var SiteDown bool
 var Templates *template.Template
 
 // Constants
-const VERSION = "2.5.11"
+const VERSION = "2.5.12"
 
 func init() {
 	flag.StringVar(&ConfigFileFlag, "c", "", "Location of the Configuration file")
