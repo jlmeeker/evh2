@@ -3,6 +3,7 @@ bin/
 pkg/
 src/code.google.com
 src/github.com
+src/gopkg.in
 local-config.gcfg
 local.cert
 local.key

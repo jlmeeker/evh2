@@ -3,14 +3,13 @@
 # Setup environment
 #
 	export GOPATH=`pwd`
-	export GOBIN=$GOPATH/bin
 
 
 # These are required is required
 #
 	# http://godoc.org/code.google.com/p/gcfg
-	if [ ! -e src/code.google.com/p/gcfg ]; then
-		go get code.google.com/p/gcfg
+	if [ ! -e src/gopkg.in/gcfg.v1 ]; then
+		go get gopkg.in/gcfg.v1
 	fi
 
 	# https://github.com/cheggaaa/pb
@@ -41,7 +40,7 @@
 
 # Build (cleanup then build for 64- and 32-bit on the native platform)
 #
-	rm -rf $GOBIN/*
+	rm -rf $GOPATH/bin/*
 	rm -rf $GOPATH/pkg/*
 	GOOS=linux GOARCH=amd64 go install $FLAGS morinda.com/evh
 	GOOS=linux GOARCH=386 go install $FLAGS morinda.com/evh
